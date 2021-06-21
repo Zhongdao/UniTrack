@@ -23,10 +23,9 @@ from tracker.sot.lib.utils.utils import  load_dataset, crop_chw, \
     gaussian_shaped_labels, cxy_wh_2_rect1, rect1_2_cxy_wh, cxy_wh_2_bbox
 from tracker.sot.lib.core.eval_otb import eval_auc_tune
 
-from model import CRW
-from data.vos import color_normalize, load_image, im_to_numpy, im_to_torch
 import utils
-import utils.test_utils as test_utils
+from model import AppearanceModel, partial_load
+from data.vos import color_normalize, load_image, im_to_numpy, im_to_torch
 
 def sot_loadimg(path, im_mean, im_std, use_lab=False):
     img = load_image(path)
@@ -171,26 +170,26 @@ def main():
     args.arch = 'SiamFC'
 
     # prepare model
-    base = CRW(args, vis=False).to(args.device) 
+    base = AppearanceModel(args).to(args.device) 
     print('Total params: %.2fM' % 
             (sum(p.numel() for p in base.parameters())/1e6))
     print(base)
     if os.path.isfile(args.resume):
         print('==> Resuming from checkpoint..')
         checkpoint = torch.load(args.resume) 
-        if args.model_type == 'scratch' or args.model_type=='imagenet18':
+        if args.model_type == 'crw' or args.model_type=='imagenet18':
             state = {}
             for k,v in checkpoint['model'].items():
                 if 'conv1.1.weight' in k or 'conv2.1.weight' in k:
                     state[k.replace('.1.weight', '.weight')] = v
                 elif 'encoder.model' in k:
-                    state[k.replace('encoder.model', 'encoder')] = v
+                    state[k.replace('encoder.model', 'model')] = v
                 else:
                     state[k] = v
-            utils.partial_load(state, base, skip_keys=['head'])
+            partial_load(state, base, skip_keys=['head'])
         del checkpoint
     
-    net = models.__dict__[args.arch](base=base.encoder, config=TrackerConfig())
+    net = models.__dict__[args.arch](base=base, config=TrackerConfig())
     net.eval()
     net = net.cuda()
 

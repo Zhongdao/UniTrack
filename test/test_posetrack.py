@@ -18,7 +18,6 @@ import numpy as np
 import torch
 from torchvision.transforms import transforms as T
 
-from utils import arguments
 from utils.log import logger
 from utils.meter import Timer
 from utils.mask import pts2array

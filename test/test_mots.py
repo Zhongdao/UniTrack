@@ -14,7 +14,6 @@ import torch
 from torchvision.transforms import transforms as T
 
 sys.path[0] = os.getcwd()
-from utils import arguments
 from utils.log import logger
 from utils.meter import Timer
 import data.video as videodataset

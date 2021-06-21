@@ -11,9 +11,8 @@ import torch
 import torch.nn.functional as F
 from torchvision import ops
 
-from model import CRW
+from model import AppearanceModel,partial_load
 from utils.log import logger
-from utils import partial_load
 from core.association import matching
 from core.propagation import propagate
 from core.motion.kalman_filter import KalmanFilter
@@ -32,21 +31,21 @@ class AssociationTracker(object):
 
         self.kalman_filter = KalmanFilter()
 
-        base = CRW(opt, vis=False).to(opt.device) 
+        base = AppearanceModel(opt).to(opt.device) 
         if os.path.isfile(opt.resume):
             checkpoint = torch.load(opt.resume) 
-            if opt.model_type == 'scratch' or opt.model_type=='imagenet18':
+            if opt.model_type == 'crw' or opt.model_type=='imagenet18':
                 state = {}
                 for k,v in checkpoint['model'].items():
                     if 'conv1.1.weight' in k or 'conv2.1.weight' in k:
                         state[k.replace('.1.weight', '.weight')] = v
                     elif 'encoder.model' in k:
-                        state[k.replace('encoder.model', 'encoder')] = v
+                        state[k.replace('encoder.model', 'model')] = v
                     else:
                         state[k] = v
                 partial_load(state, base, skip_keys=['head'], log=False)
             del checkpoint
-        self.app_model = base.encoder
+        self.app_model = base
         self.app_model.eval()
 
         def extract_emb(self, img, obs):

@@ -22,9 +22,7 @@ import torch
 import torch.nn.functional as F
 from torchvision import ops
 
-from model import CRW
 from utils.log import logger
-from utils import partial_load
 from core.association import matching
 from core.propagation import propagate
 from core.motion.kalman_filter import KalmanFilter

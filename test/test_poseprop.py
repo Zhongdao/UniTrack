@@ -15,17 +15,15 @@ import torch
 import torch.nn as nn
 import torch.backends.cudnn as cudnn
 
-from model import CRW
-
 from data import vos, jhmdb
-
+from model import AppearanceModel
+from model.functional import *
 import utils
-import utils.test_utils as test_utils
-
+from utils.visualize import dump_predictions 
 
 def main(args, vis):
-    model = CRW(args, vis=vis).to(args.device)
-    args.mapScale = test_utils.infer_downscale(model)
+    model = AppearanceModel(args).to(args.device)
+    args.mapScale = [args.down_factor, args.down_factor] 
 
     dataset = jhmdb.JhmdbSet(args)
     val_loader = torch.utils.data.DataLoader(dataset,
@@ -80,7 +78,7 @@ def test(loader, model, args):
             bsize = 5   # minibatch size for computing features
             feats = []
             for b in range(0, imgs.shape[1], bsize):
-                feat = model.encoder(imgs[:, b:b+bsize].transpose(1,2).to(args.device))
+                feat = model(imgs[:, b:b+bsize].transpose(1,2).to(args.device))
                 feats.append(feat.cpu())
             feats = torch.cat(feats, dim=2).squeeze(1)
 
@@ -97,12 +95,12 @@ def test(loader, model, args):
             t03 = time.time()
             
             # Prepare source (keys) and target (query) frame features
-            key_indices = test_utils.context_index_bank(n_context, args.long_mem, N - n_context)
+            key_indices = context_index_bank(n_context, args.long_mem, N - n_context)
             key_indices = torch.cat(key_indices, dim=-1)           
             keys, query = feats[:, :, key_indices], feats[:, :, n_context:]
 
             # Make spatial radius mask TODO use torch.sparse
-            restrict = utils.MaskedAttention(args.radius, flat=False)
+            restrict = MaskedAttention(args.radius, flat=False)
             D = restrict.mask(*feats.shape[-2:])[None]
             D = D.flatten(-4, -3).flatten(-2)
             D[D==0] = -1e10; D[D==1] = 0
@@ -111,10 +109,8 @@ def test(loader, model, args):
             keys, query = keys.flatten(-2), query.flatten(-2)
 
             print('computing affinity')
-            Ws, Is = test_utils.mem_efficient_batched_affinity(query, keys, D, 
+            Ws, Is = mem_efficient_batched_affinity(query, keys, D, 
                         args.temperature, args.topk, args.long_mem, args.device)
-            # Ws, Is = test_utils.batched_affinity(query, keys, D, 
-            #             args.temperature, args.topk, args.long_mem, args.device)
 
             if torch.cuda.is_available():
                 print(time.time()-t03, 'affinity forward, max mem', torch.cuda.max_memory_allocated() / (1024**2))
@@ -151,12 +147,12 @@ def test(loader, model, args):
                 cur_img = imgs_orig[0, t + n_context].permute(1,2,0).numpy() * 255
                 _maps = []
 
-                coords, pred_sharp = test_utils.process_pose(pred, lbl_map)
+                coords, pred_sharp = process_pose(pred, lbl_map)
                 keypts.append(coords)
                 pose_map = utils.visualize.vis_pose(np.array(cur_img).copy(), coords.numpy() * args.mapScale[..., None])
                 _maps += [pose_map]
                 outpath = osp.join(args.save_path, str(vid_idx)+'_'+str(t))
-                heatmap, lblmap, heatmap_prob = test_utils.dump_predictions(
+                heatmap, lblmap, heatmap_prob = dump_predictions(
                     pred.cpu().numpy(),
                     lbl_map, cur_img, outpath)
 

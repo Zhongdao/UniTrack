@@ -15,44 +15,42 @@ import torch
 import torch.nn as nn
 import torch.backends.cudnn as cudnn
 
-from model import CRW
-
 from data import vos, jhmdb
-
+from model import AppearanceModel, partial_load
+from model.functional import *
 import utils
-import utils.test_utils as test_utils
-
+from utils.visualize import dump_predictions 
 
 def main(args, vis):
-    model = CRW(args, vis=vis).to(args.device)
-    args.mapScale = test_utils.infer_downscale(model)
+    model = AppearanceModel(args).to(args.device)
+    print('Total params: %.2fM' % 
+            (sum(p.numel() for p in model.parameters())/1000000.0))
+    print(model)
+    args.mapScale = [args.down_factor, args.down_factor] 
 
-    dataset = vos.VOSDataset(args)
-    val_loader = torch.utils.data.DataLoader(dataset,
-        batch_size=1, shuffle=False, num_workers=args.workers, pin_memory=True)
-
-    # cudnn.benchmark = False
-    print('Total params: %.2fM' % (sum(p.numel() for p in model.parameters())/1000000.0))
-
-    # Load checkpoint.
     if os.path.isfile(args.resume):
         print('==> Resuming from checkpoint..')
         checkpoint = torch.load(args.resume)
-        
-        if args.model_type == 'scratch':
+        if args.model_type == 'crw' or args.model_type=='imagenet18':
             state = {}
             for k,v in checkpoint['model'].items():
                 if 'conv1.1.weight' in k or 'conv2.1.weight' in k:
                     state[k.replace('.1.weight', '.weight')] = v
+                elif 'encoder.model' in k:
+                    state[k.replace('encoder.model', 'model.model')] = v
                 else:
                     state[k] = v
-            utils.partial_load(state, model, skip_keys=['head'])
+            partial_load(state, model, skip_keys=['head'])
 
         del checkpoint
     
     model.eval()
     model = model.to(args.device)
 
+    dataset = vos.VOSDataset(args)
+    val_loader = torch.utils.data.DataLoader(dataset,
+        batch_size=1, shuffle=False, num_workers=args.workers, pin_memory=True)
+    
     if not os.path.exists(args.save_path):
         os.makedirs(args.save_path)
     
@@ -89,7 +87,7 @@ def test(loader, model, args):
             bsize = 5   # minibatch size for computing features
             feats = []
             for b in range(0, imgs.shape[1], bsize):
-                feat = model.encoder(imgs[:, b:b+bsize].transpose(1,2).to(args.device))
+                feat = model(imgs[:, b:b+bsize].transpose(1,2).to(args.device))
                 feats.append(feat.cpu())
             feats = torch.cat(feats, dim=2).squeeze(1)
 
@@ -106,12 +104,12 @@ def test(loader, model, args):
             t03 = time.time()
             
             # Prepare source (keys) and target (query) frame features
-            key_indices = test_utils.context_index_bank(n_context, args.long_mem, N - n_context)
+            key_indices = context_index_bank(n_context, args.long_mem, N - n_context)
             key_indices = torch.cat(key_indices, dim=-1)           
             keys, query = feats[:, :, key_indices], feats[:, :, n_context:]
 
             # Make spatial radius mask TODO use torch.sparse
-            restrict = utils.MaskedAttention(args.radius, flat=False)
+            restrict = MaskedAttention(args.radius, flat=False)
             D = restrict.mask(*feats.shape[-2:])[None]
             D = D.flatten(-4, -3).flatten(-2)
             D[D==0] = -1e10; D[D==1] = 0
@@ -120,7 +118,7 @@ def test(loader, model, args):
             keys, query = keys.flatten(-2), query.flatten(-2)
 
             print('computing affinity')
-            Ws, Is = test_utils.mem_efficient_batched_affinity(query, keys, D, 
+            Ws, Is = mem_efficient_batched_affinity(query, keys, D, 
                         args.temperature, args.topk, args.long_mem, args.device)
 
             if torch.cuda.is_available():
@@ -158,19 +156,9 @@ def test(loader, model, args):
                 cur_img = imgs_orig[0, t + n_context].permute(1,2,0).numpy() * 255
                 _maps = []
 
-                if 'jhmdb' in args.filelist.lower():
-                    coords, pred_sharp = test_utils.process_pose(pred, lbl_map)
-                    keypts.append(coords)
-                    pose_map = utils.vis_pose(np.array(cur_img).copy(), coords.numpy() * args.mapScale[..., None])
-                    _maps += [pose_map]
+                outpath = os.path.join(args.save_path, str(vid_idx) + '_' + str(t))
 
-                if 'VIP' in args.filelist:
-                    outpath = os.path.join(args.save_path, 'videos'+meta['img_paths'][t+n_context][0].split('videos')[-1])
-                    os.makedirs(os.path.dirname(outpath), exist_ok=True)
-                else:
-                    outpath = os.path.join(args.save_path, str(vid_idx) + '_' + str(t))
-
-                heatmap, lblmap, heatmap_prob = test_utils.dump_predictions(
+                heatmap, lblmap, heatmap_prob = dump_predictions(
                     pred.cpu().numpy(),
                     lbl_map, cur_img, outpath)
 
