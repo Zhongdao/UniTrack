@@ -1,4 +1,7 @@
 weights/
+results/
+out/
+vis/
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
