@@ -1,0 +1,10 @@
+# python
+venv*/
+__pycache__
+*.egg-info/
+
+# editor
+.vscode/
+
+# data
+out/
