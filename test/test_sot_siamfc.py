@@ -174,20 +174,6 @@ def main():
     print('Total params: %.2fM' % 
             (sum(p.numel() for p in base.parameters())/1e6))
     print(base)
-    if os.path.isfile(args.resume):
-        print('==> Resuming from checkpoint..')
-        checkpoint = torch.load(args.resume) 
-        if args.model_type == 'crw' or args.model_type=='imagenet18':
-            state = {}
-            for k,v in checkpoint['model'].items():
-                if 'conv1.1.weight' in k or 'conv2.1.weight' in k:
-                    state[k.replace('.1.weight', '.weight')] = v
-                elif 'encoder.model' in k:
-                    state[k.replace('encoder.model', 'model')] = v
-                else:
-                    state[k] = v
-            partial_load(state, base, skip_keys=['head'])
-        del checkpoint
     
     net = models.__dict__[args.arch](base=base, config=TrackerConfig())
     net.eval()

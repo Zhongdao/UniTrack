@@ -27,23 +27,7 @@ def main(args, vis):
             (sum(p.numel() for p in model.parameters())/1000000.0))
     print(model)
     args.mapScale = [args.down_factor, args.down_factor] 
-
-    if os.path.isfile(args.resume):
-        print('==> Resuming from checkpoint..')
-        checkpoint = torch.load(args.resume)
-        if args.model_type == 'crw' or args.model_type=='imagenet18':
-            state = {}
-            for k,v in checkpoint['model'].items():
-                if 'conv1.1.weight' in k or 'conv2.1.weight' in k:
-                    state[k.replace('.1.weight', '.weight')] = v
-                elif 'encoder.model' in k:
-                    state[k.replace('encoder.model', 'model.model')] = v
-                else:
-                    state[k] = v
-            partial_load(state, model, skip_keys=['head'])
-
-        del checkpoint
-    
+ 
     model.eval()
     model = model.to(args.device)
 

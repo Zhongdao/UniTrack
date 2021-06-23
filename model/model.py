@@ -1,13 +1,14 @@
 import pdb
+import os.path as osp
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torchvision
 from torchvision import transforms
-
 import numpy as np
-import utils
 
+import utils
 import model.resnet as resnet
 import model.hrnet as hrnet
 import model.random_feat_generator as random_feat_generator
@@ -22,9 +23,9 @@ class AppearanceModel(nn.Module):
         z = self.model(x)
         return z
 
-def partial_load(pretrained_dict, model, skip_keys=[], log=True):
+def partial_load(pretrained_dict, model, skip_keys=[], log=False):
     model_dict = model.state_dict()
-
+    
     # 1. filter out unnecessary keys
     filtered_dict = {k: v for k, v in pretrained_dict.items() if k in model_dict and not any([sk in k for sk in skip_keys])}
     skipped_keys = [k for k in pretrained_dict if k not in filtered_dict]
@@ -96,6 +97,18 @@ def make_encoder(args):
     model_type = args.model_type
     if model_type == 'crw':
         net = resnet.resnet18()
+        if osp.isfile(args.resume):
+            ckpt = torch.load(args.resume)
+            state = {}
+            for k, v in ckpt['model'].items():
+                if 'conv1.1.weight' in k or 'conv2.1.weight' in k:
+                    state[k.replace('.1.weight', '.weight')] = v
+                if 'encoder.model' in k:
+                    state[k.replace('encoder.model.', '')] = v
+                else:
+                    state[k] = v
+            partial_load(state, net, skip_keys=['head',])
+            del ckpt
     elif model_type == 'random18':
         net = resnet.resnet18(pretrained=False)
     elif model_type == 'random50': 

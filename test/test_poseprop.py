@@ -29,25 +29,8 @@ def main(args, vis):
     val_loader = torch.utils.data.DataLoader(dataset,
         batch_size=1, shuffle=False, num_workers=args.workers, pin_memory=True)
 
-    # cudnn.benchmark = False
     print('Total params: %.2fM' % (sum(p.numel() for p in model.parameters())/1000000.0))
-
-    # Load checkpoint.
-    if os.path.isfile(args.resume):
-        print('==> Resuming from checkpoint..')
-        checkpoint = torch.load(args.resume)
-        
-        if args.model_type == 'scratch':
-            state = {}
-            for k,v in checkpoint['model'].items():
-                if 'conv1.1.weight' in k or 'conv2.1.weight' in k:
-                    state[k.replace('.1.weight', '.weight')] = v
-                else:
-                    state[k] = v
-            utils.partial_load(state, model, skip_keys=['head'])
-
-        del checkpoint
-    
+ 
     model.eval()
     model = model.to(args.device)
 
