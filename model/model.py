@@ -18,7 +18,6 @@ class AppearanceModel(nn.Module):
         self.args = args
         
         self.model = make_encoder(args).to(self.args.device)
-
     def forward(self, x):
         z = self.model(x)
         return z
@@ -96,12 +95,6 @@ def make_encoder(args):
             'pixpro', 'detco', 'barlowtwins']
     model_type = args.model_type
     if model_type == 'crw':
-        net = resnet.resnet18()
-        if args.nopadding:
-            net.modify(padding='no')
-        else:
-            net.modify(padding='reflect')
-    elif model_type == 'scratch_zeropad':
         net = resnet.resnet18()
     elif model_type == 'random18':
         net = resnet.resnet18(pretrained=False)

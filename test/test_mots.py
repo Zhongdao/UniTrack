@@ -17,12 +17,11 @@ sys.path[0] = os.getcwd()
 from utils.log import logger
 from utils.meter import Timer
 import data.video as videodataset
-from eval.mots.evalMOTS import MOTSEvaluator
+
+from eval import trackeval
 from eval.mots.MOTSVisualization import MOTSVisualizer
 from utils import visualize as vis
 from utils.io import write_mots_results, mkdir_if_missing
-from eval import trackeval
-
 from tracker.mot.mask import MaskAssociationTracker
 
 def eval_seq(opt, dataloader, result_filename, save_dir=None, 
