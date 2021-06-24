@@ -2,9 +2,10 @@
 
 --------------------------------------------------------------------------------
 
-UniTrack is a simple and *Uni*fied framework for versatile visual *Track*ing tasks. 
 
-[ArXiv link](https://arxiv.org): Do different tracking tasks require different appearance model?
+[[ArXiv link]: Do different tracking tasks require different appearance model?](https://arxiv.org)
+
+UniTrack is a simple and *Uni*fied framework for versatile visual *Track*ing tasks. 
 
 As an important problem in computer vision, tracking has been fragmented into a multitude of different experimental setups. As a consequence, the literature has fragmented too, and now the novel approaches proposed by the community are usually specialized to fit only one specific setup. To understand to what extend this specialization is actually necessary, we present UniTrack, a solution to address multiple different tracking tasks within the same framework. All tasks share the same universal **appearance model**. UniTrack enjoys the following advantages,
 
