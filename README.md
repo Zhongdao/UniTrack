@@ -16,7 +16,7 @@ As an important problem in computer vision, tracking has been fragmented into a 
 - Could serve as an evaluation platform to test pre-trained (e.g. via self-supervised learning) representations on tracking tasks.
 
 ## Tasks & Framework
-![taskframework](assert/taskframework.png)
+![tasksframework](assert/tasksframework.png)
 
 ## Getting started
 
