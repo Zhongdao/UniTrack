@@ -3,7 +3,7 @@
 --------------------------------------------------------------------------------
 
 
-[[ArXiv link]: Do different tracking tasks require different appearance model?](https://arxiv.org)
+[[ArXiv link (comming soon)]: Do different tracking tasks require different appearance model?](https://arxiv.org)
 
 UniTrack is a simple and **Uni**fied framework for versatile visual **Track**ing tasks. 
 
@@ -21,3 +21,5 @@ As an important problem in computer vision, tracking has been fragmented into a 
 
 ## Demo
 
+## Update log
+[2021.6.24]: Start writing docs, please stay tuned!
