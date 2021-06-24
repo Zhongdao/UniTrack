@@ -1,1 +1,1 @@
-![UniTrack Logo](assert/logo.png)
+![UniTrack Logo](assert/logo.pdf)
