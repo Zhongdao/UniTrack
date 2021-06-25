@@ -6,7 +6,6 @@ from matplotlib import cm
 
 import time
 import PIL
-import imageio
 
 import pycocotools.mask as mask_utils
 from . import palette
