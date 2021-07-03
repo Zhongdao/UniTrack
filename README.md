@@ -1,23 +1,23 @@
-![UniTrack Logo](docs/logo.png)
+<p align="center"> <img src="docs/logo.png" width="500"/> 
 
 --------------------------------------------------------------------------------
 
 
 Paper: Do different tracking tasks require different appearance model?
 
-[[ArXiv](https://arxiv.org)] (comming soon) [[Project Page](https://arxiv.org)] (comming soon)
+[[ArXiv](https://arxiv.org)] (coming soon) [[Project Page](https://arxiv.org)] (coming soon)
 
-UniTrack is a simple and **Uni**fied framework for versatile visual **Track**ing tasks. 
+UniTrack is a simple and Unified framework for addressing multiple tracking tasks. 
 
-As an important problem in computer vision, tracking has been fragmented into a multitude of different experimental setups. As a consequence, the literature has fragmented too, and now the novel approaches proposed by the community are usually specialized to fit only one specific setup. To understand to what extend this specialization is actually necessary, we present UniTrack, a solution to address multiple different tracking tasks within the same framework. All tasks share the same universal [appearance model](#appearance-model). UniTrack enjoys the following advantages,
+Being a fundamental problem in computer vision, tracking has been fragmented into a multitude of different experimental setups. As a consequence, the literature has fragmented too, and now the novel approaches proposed by the community are usually specialized to fit only one specific setup. To understand to what extend this specialization is actually necessary, we present UniTrack, a solution to address multiple different tracking tasks within the same framework. All tasks share the same [appearance model](#appearance-model). UniTrack
 
-- Do **NOT** need training on a specific tracking task.
+- Does **NOT** need training on a specific tracking task.
 
-- [Good performance in existing tracking tasks]((docs/results.md)), thus can serve as strong baselines for each task.
+- Shows [competitive performance](docs/results.md) on six out of seven tracking tasks considered.
 
-- [Could be easily adapted to novel tasks with different setup](docs/custom_task.md).
+- Can be easily adapted to even [more tasks](docs/custom_task.md).
 
-- [Could serve as an evaluation platform to test pre-trained representations on tracking tasks](docs/study.md) (e.g. via self-supervised models).
+- Can be used as an evaluation platform to [test pre-trained self-supervised models](docs/study.md).
 
 ## Tasks & Framework
 ![tasksframework](docs/tasksframework.png)
@@ -29,7 +29,7 @@ We classify existing tracking tasks along four axes: (1) Single or multiple targ
 An appearance model is the only learnable component in UniTrack. It should provide universal visual representation, and is usually pre-trained on large-scale dataset in supervised or unsupervised manners. Typical examples include ImageNet pre-trained ResNets (supervised), and recent self-supervised models such as MoCo and SimCLR (unsupervised).
 
 ### Propagation and Association
-Two fundamental algorithm building blocks in UniTrack. Both employ features extracted by the appearance model as input.  For propagation we adopt exiting methods such as [cross correlation](https://www.robots.ox.ac.uk/~luca/siamese-fc.html), [DCF](https://openaccess.thecvf.com/content_cvpr_2017/html/Valmadre_End-To-End_Representation_Learning_CVPR_2017_paper.html), and [mask propation](https://github.com/ajabri/videowalk). For association we employ a [simple algorithm](https://github.com/Zhongdao/Towards-Realtime-MOT) and develop a novel similarity metric to make full use of the appearance model.
+*Propagation* and *Association* are the two core primitives used in UniTrack to address a wide variety of tracking tasks (currently 7, but more can be added), Both use the features extracted by the pre-trained appearance model. For propagation, we adopt exiting methods such as [cross correlation](https://www.robots.ox.ac.uk/~luca/siamese-fc.html), [DCF](https://openaccess.thecvf.com/content_cvpr_2017/html/Valmadre_End-To-End_Representation_Learning_CVPR_2017_paper.html), and [mask propation](https://github.com/ajabri/videowalk). For association we employ a simple algorithm as in [JDE](https://github.com/Zhongdao/Towards-Realtime-MOT) and develop a novel reconstruction-based similairty metric that allows to compare objects across shapes and sizes.
 
 ## Results
 Below we show results of UniTrack with a simple **ImageNet Pre-trained ResNet-18** as the appearance model. More results (other tasks/datasets, more visualization) can be found in [results.md](results.md).
