@@ -1,5 +1,4 @@
 import numpy as np
-from numba import jit
 from . import region
 
 def calculate_failures(trajectory):

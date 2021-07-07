@@ -27,6 +27,7 @@ cd UniTrack
 # 4. Install ohter dependency
 conda install --file requirements.txt 
 pip install cython_bbox==0.1.3
+python setup.py
 
 ```
 
