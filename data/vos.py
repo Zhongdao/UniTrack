@@ -82,7 +82,7 @@ class VOSDataset(torch.utils.data.Dataset):
     def __init__(self, args):
 
         self.davisroot = args.davisroot
-        self.filelist = args.filelist
+        self.split = args.split
         self.imgSize = args.imgSize
         self.videoLen = args.videoLen
         self.mapScale = args.mapScale
@@ -93,17 +93,16 @@ class VOSDataset(torch.utils.data.Dataset):
         self.im_mean = args.im_mean
         self.im_std = args.im_std
 
-        f = open(self.filelist, 'r')
+        filelist = osp.join(self.davisroot, 'ImageSets/2017', self.split+'.txt')
+        f = open(filelist, 'r')
         self.jpgfiles = []
         self.lblfiles = []
 
         for line in f:
-            rows = line.split()
-            jpgfile = rows[0]
-            lblfile = rows[1]
+            seq = line.strip()
 
-            self.jpgfiles.append(osp.join(self.davisroot, jpgfile))
-            self.lblfiles.append(osp.join(self.davisroot, lblfile))
+            self.jpgfiles.append(osp.join(self.davisroot,'JPEGImages','480p', seq))
+            self.lblfiles.append(osp.join(self.davisroot, 'Annotations','480p', seq))
 
         f.close()
     

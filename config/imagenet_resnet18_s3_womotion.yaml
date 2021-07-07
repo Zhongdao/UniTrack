@@ -23,7 +23,7 @@ sot:
 
 vos:
     davisroot: '/home/wangzd/datasets/uvc/DAVIS/'
-    filelist: 'data/davis_vallist.txt'
+    split: 'val'
     temperature: 0.05
     topk: 10
     radius: 12
