@@ -30,13 +30,6 @@ class SiamFC(nn.Module):
         return response
     
     def update(self, z, lr=0):
-        #outs = []
-        #def h(module, inp, out):
-        #    outs.append(out.data.cpu().numpy())
-        #self.features.conv1.register_forward_hook(h)
-        #self.features.bn1.register_forward_hook(h)
-        #self.features.maxpool.register_forward_hook(h)
-        #pdb.set_trace()
         zf = self.feature_extractor(z).detach() 
         _, _, ts, ts = zf.shape
 
