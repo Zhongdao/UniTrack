@@ -107,6 +107,10 @@ Below we show results of UniTrack with a simple **ImageNet Pre-trained ResNet-18
 
 ## Getting started
 
+1. Installation: Please check out [docs/INSTALL.md](docs/INSTALL.md)
+2. Data preparation: Please check out [docs/DATA.md](docs/DATA.md)
+3. Appearance model preparation: Please check out [docs/MODELZOO.md](docs/MODELZOO.md)
+4. Run evaluation on all datasets: Please check out [docs/RUN.md](docs/RUN.md)
 
 ## Demo
 
