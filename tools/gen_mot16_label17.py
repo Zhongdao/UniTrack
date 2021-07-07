@@ -3,15 +3,17 @@ import os
 import numpy as np
 import pdb
 
+# Modify here. 
+# Note: Since we borrow detection results from MOT17 dataset, 
+# we need to place MOT17 dataset under the same folder of MOT16 dataset,
+# e.g. /home/wangzd/datasets/MOT/MOT17 
+det = 'DPM' # 'DPM'/'FRCNN'/'SDP'
+split = 'train' # 'test'/'train'
+mot16_root = '/home/wangzd/datasets/MOT/MOT16'
 
-def mkdirs(d):
-    if not osp.exists(d):
-        os.makedirs(d)
-
-det = 'SDP'
-seq_root = '/home/wangzd/datasets/MOT/MOT16/images/train'
-label_root = '/home/wangzd/datasets/MOT/MOT16/obs/{}/train'.format(det)
-mkdirs(label_root)
+seq_root = osp.join(mot16_root,'images', split)
+label_root = osp.join(mot16_root, 'obs', det, split)
+os.makedirs(label_root, exist_ok=True)
 seqs = [s for s in os.listdir(seq_root)]
 
 tid_curr = 0
@@ -27,9 +29,13 @@ for seq in seqs:
     gt = np.loadtxt(ob_txt, dtype=np.float64, delimiter=',')
 
     seq_label_root = osp.join(label_root, seq, 'img1')
-    mkdirs(seq_label_root)
+    os.makedirs(seq_label_root, exist_ok=True)
 
-    for fid, tid, x, y, w, h, conf  in gt:
+    for z in gt:
+        if det == 'DPM':
+            fid, tid, x, y, w, h, conf, mark, label, _ = z
+        else:
+            fid, tid, x, y, w, h, conf = z
         fid = int(fid)
         tid = int(tid)
         if not tid == tid_last:

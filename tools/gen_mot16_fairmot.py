@@ -3,15 +3,15 @@ import os
 import numpy as np
 import pdb
 
+# Modify here. 
+det = 'FairMOT'
+split = 'test'
+mot16_root = '/home/wangzd/datasets/MOT/MOT16'
+det_lists_root = '/home/wangzd/datasets/MOT/MOT16/dets/fairmot_det/'
 
-def mkdirs(d):
-    if not osp.exists(d):
-        os.makedirs(d)
-
-det = 'DPM'
-seq_root = '/home/wangzd/datasets/MOT/MOT16/images/train'
-label_root = '/home/wangzd/datasets/MOT/MOT16/obs/{}/train'.format(det)
-mkdirs(label_root)
+seq_root = osp.join(mot16_root,'images', split)
+label_root = osp.join(mot16_root, 'obs', det, split)
+os.makedirs(label_root, exist_ok=True)
 seqs = [s for s in os.listdir(seq_root)]
 
 tid_curr = 0
@@ -22,14 +22,14 @@ for seq in seqs:
     seq_height = int(seq_info[seq_info.find('imHeight=') + 9:seq_info.find('\nimExt')])
 
     
-    ob_txt = osp.join(seq_root, seq+'-'+det, 'det', 'det.txt')
-    ob_txt = ob_txt.replace('MOT16', 'MOT17') 
+    ob_txt = osp.join(det_lists_root, '{}.txt'.format(seq))
     gt = np.loadtxt(ob_txt, dtype=np.float64, delimiter=',')
 
     seq_label_root = osp.join(label_root, seq, 'img1')
-    mkdirs(seq_label_root)
+    os.makedirs(seq_label_root, exist_ok=True)
 
-    for fid, tid, x, y, w, h, conf, mark, label, _ in gt:
+    for fid, x, y, w, h, conf,  in gt:
+        tid = -1 
         fid = int(fid)
         tid = int(tid)
         if not tid == tid_last:
