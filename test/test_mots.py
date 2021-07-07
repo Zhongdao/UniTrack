@@ -6,7 +6,6 @@ import yaml
 import logging
 import argparse
 import os.path as osp
-import motmetrics as mm
 import pycocotools.mask as mask_utils
 
 import numpy as np

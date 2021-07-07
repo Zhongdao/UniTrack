@@ -11,7 +11,6 @@ import logging
 import argparse
 from tqdm import tqdm
 from itertools import groupby
-import motmetrics as mm
 import pycocotools.mask as mask_utils
 
 import numpy as np

@@ -6,7 +6,6 @@ import yaml
 import logging
 import argparse
 import os.path as osp
-import motmetrics as mm
 
 import numpy as np
 import torch
