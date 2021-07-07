@@ -1,0 +1,11 @@
+scikit-learn==0.22
+opencv==4.0
+pyyaml==5.3.1
+easydict==1.9
+imageio==2.6.1
+tqdm==4.42.0
+shapely==1.7.1
+matplotlib==2.2.2
+pycocotools==2.0
+lap==0.4.0
+cython_bbox==0.1.3

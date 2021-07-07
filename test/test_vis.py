@@ -9,7 +9,6 @@ import logging
 import argparse
 from tqdm import tqdm
 import os.path as osp
-import motmetrics as mm
 from itertools import groupby
 import pycocotools.mask as mask_utils
 
@@ -21,7 +20,6 @@ sys.path[0] = os.getcwd()
 from utils.log import logger
 from utils.meter import Timer
 import data.video as videodataset
-from eval.eval_mot import Evaluator
 from utils import visualize as vis
 from utils.mask import temp_interp_mask, mask_seq_jac
 from utils.io import write_mot_results, mkdir_if_missing

@@ -40,18 +40,15 @@ def dump_predictions(pred, lbl_set, img, prefix):
     img_with_heatmap1 =  np.float32(img) * 0.5 + np.float32(pred_soft) * 0.5
 
     # Save blend image for visualization
-    imageio.imwrite('%s_blend.jpg' % prefix, np.uint8(img_with_label))
+    io.imwrite('%s_blend.jpg' % prefix, np.uint8(img_with_label))
 
     if prefix[-4] != '.':  # Super HACK-y
         imname2 = prefix + '_mask.png'
-        # skimage.io.imsave(imname2, np.uint8(pred_val))
     else:
         imname2 = prefix.replace('jpg','png')
-        # pred_val = np.uint8(pred_val)
-        # skimage.io.imsave(imname2.replace('jpg','png'), pred_val)
 
     # Save predicted labels for evaluation
-    imageio.imwrite(imname2, np.uint8(pred_lbl))
+    io.imwrite(imname2, np.uint8(pred_lbl))
 
     return img_with_label, pred_lbl, img_with_heatmap1
 
