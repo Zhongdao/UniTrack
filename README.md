@@ -5,7 +5,7 @@
 
 Paper: Do different tracking tasks require different appearance model?
 
-[[ArXiv](https://arxiv.org)] (coming soon) [[Project Page](https://arxiv.org)] (coming soon)
+**[[ArXiv](https://arxiv.org/pdf/2107.02156.pdf)]**  **[[Project Page](https://arxiv.org)] (coming soon)**
 
 UniTrack is a simple and Unified framework for addressing multiple tracking tasks. 
 
@@ -116,7 +116,8 @@ Below we show results of UniTrack with a simple **ImageNet Pre-trained ResNet-18
 
 
 ## Update log
-[2021.6.24]: Start writing docs, please stay tuned!
+[2021.07.05]: Paper released on [arXiv](https://arxiv.org/pdf/2107.02156.pdf).
+[2021.06.24]: Start writing docs, please stay tuned!
 
 ## Acknowledgement
 [VideoWalk](https://github.com/ajabri/videowalk) by Allan A. Jabri
