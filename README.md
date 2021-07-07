@@ -116,7 +116,9 @@ Below we show results of UniTrack with a simple **ImageNet Pre-trained ResNet-18
 
 
 ## Update log
+
 [2021.07.05]: Paper released on [arXiv](https://arxiv.org/pdf/2107.02156.pdf).
+
 [2021.06.24]: Start writing docs, please stay tuned!
 
 ## Acknowledgement

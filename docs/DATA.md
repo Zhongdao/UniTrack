@@ -1,0 +1,54 @@
+# Dataset preparation
+
+### Introduction
+
+In this documentation we introduce how to prepara standard datasets to benchmark UniTrack on different tasks. We consider five tasks: Single Object Tracking (SOT) on OTB 2015 dataset, Video Object Segmentation (VOS) on DAVIS 2017 dataset, Multiple Object Tracking (MOT) on MOT 16 dataset, Multiple Object Tracking and Segmentation (MOTS) on MOTS dataset, Pose Tracking on PoseTrack 2018 dataset. Among them, SOT and VOS are propagation-type tasks, in which only one observation (usually in the very first frame) is given to indicate the object to be tracked, while others are association-type tasks that support to make use of observations in every timestamp given by an automatic detector . 
+
+- **Table of contents**
+  - [Prepare OTB 2015 datset for SOT](#OTB-2015-dataset-for-SOT)
+  - [Prepare DAVIS 2017 datset for VOS](#DAVIS-2017-dataset-for-VOS)
+  - [Prepare MOT 16 datset for MOT](#MOT-16-dataset-for-MOT)
+  - [Prepare MOTS dataset for MOTS](#MOTS-dataset-for-MOTS)
+  - [Prepare PoseTrack 2018 for Pose Tracking](#PoseTrack-2018-dataset-for-Pose-Tracking)
+
+
+### OTB 2015 dataset for SOT
+
+The [original source](http://cvlab.hanyang.ac.kr/tracker_benchmark/datasets.html) of OTB benchmark does not provide a convenient way to download the entire dataset. Lukily [Gluon CV](https://cv.gluon.ai/contents.html) provides a [script](https://cv.gluon.ai/_downloads/719c5c0d73fb22deacc84b4557b6fd5f/otb2015.py) for easy downloading all OTB video sequences. This script  includes both dataset downloading and data processing，simply run this script:
+
+`python otb2015.py`
+
+and you will get all the 100 sequences of OTB. After this, you need to copy Jogging to Jogging-1 and Jogging-2, and copy Skating2 to Skating2-1 and Skating2-2 or using softlink, following [STVIR](https://github.com/STVIR/pysot/tree/master/testing_dataset). Finally, please download OTB2015.josn \[[Google Drive](https://drive.google.com/file/d/1jHYta8wsSid9DwcWl5hcNJNPzgQMcI_r/view?usp=sharing)\]\[[Baidu NetDisk](https://pan.baidu.com/s/1d9oR7ZEHq4V5i6bLpEllng)\] (code:k93s) and place it under the OTB-2015 root. The structrue should look like this:
+
+```
+${OTB_ROOT}
+   |——— OTB2015.json
+   |        
+   └———Basketball/
+   | 
+   └———Biker/
+   | 
+   ...
+```
+
+
+
+### DAVIS 2017 dataset for VOS
+
+Download DAVIS 2017 trainval via [this link](https://data.vision.ee.ethz.ch/csergi/share/davis/DAVIS-2017-trainval-480p.zip) and unzip it. No other processing is needed.
+
+### MOT 16 dataset for MOT
+
+1. Download MOT-16 dataset from [this page](https://motchallenge.net/data/MOT16/).
+2. Get detections for MOT-16 sequences. Here we offer multiple options:
+
+   - Using ground-truth detections. This is feasible only in the *train* split (we do not have labels for the *test* split). Run `python tools/gen_mot16_gt.py` to prepare the detections.
+   - Using three kind of official detections (DPM/FRCNN/SDP) provided by MOT Challenge. Detections are from MOT-17 dataset (the video sequences in MOT-17 are the same as MOT-16), so you may need download MOT-17 and unzip it under the same root of MOT-16 first. Then run `python tools/gen_mot16_label17.py` to prepare the detections. Can generate detections for both *train* and *test* splits. 
+   - [Recommended] Using custom detectors to generate detection results. You need to first run the detector on MOT-16 dataset and output a series of `MOT16-XX.txt` files to store the detection results, where XX ranges from 01 to 14. Each line in the `.txt` file represents a bounding box in format of `[frame_index](starts from 1), x, y, w, h, confidence`. Then run `tools/gen_mot16_fairmot.py`(for example we are using detections from FairMOT) to prepare the detections. 
+   
+       A good point is that you can also download `.txt` results of other trackers from the [MOT-16 leaderboard](https://motchallenge.net/results/MOT16/) or of other detectors from the [MOT-17 DET leaderboard](https://motchallenge.net/results/MOT17Det/)， and use their detection results with very few modifications on `tools/gen_mot16_fairmot.py`. 
+
+### MOTS dataset for MOTS
+
+
+### PoseTrack 2018 dataset for Pose Tracking
