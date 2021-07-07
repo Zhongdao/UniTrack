@@ -42,6 +42,7 @@ def main(args, vis):
         test_loss = test(val_loader, model, args)
             
     cvt_path = args.save_path.replace(args.exp_name, 'convert_'+args.exp_name)
+    
     # convert to DAVIS format
     cvt_cmd_str = ('python ./eval/convert_davis.py --in_folder {} --out_folder {} '
                '--dataset {}').format(args.save_path, cvt_path, args.davisroot)

@@ -18,7 +18,7 @@ from easydict import EasyDict as edict
 import torch
 import numpy as np
 
-import tracker.sot.lib.models.models as models
+import tracker.sot.lib.models as models
 from tracker.sot.lib.utils.utils import  load_dataset, crop_chw, \
     gaussian_shaped_labels, cxy_wh_2_rect1, rect1_2_cxy_wh, cxy_wh_2_bbox
 from tracker.sot.lib.core.eval_otb import eval_auc_tune
