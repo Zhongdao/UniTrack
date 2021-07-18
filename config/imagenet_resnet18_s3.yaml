@@ -1,5 +1,5 @@
 common:
-    exp_name: imagenet_resnet18_s3_womotion
+    exp_name: imagenet_resnet18_s3 
    
     # Model related
     model_type: imagenet18
@@ -51,9 +51,9 @@ mot:
     confirm_iou_thres: 0.7
     img_size: [1088, 608]
     prop_flag: False
-    use_motion: False
-    motion_lambda: 1
-    motion_gated: False
+    use_motion: True
+    motion_lambda: 0.98
+    motion_gated: True
 
 mots:
     obid: 'COSTA'
@@ -71,8 +71,8 @@ mots:
     confirm_iou_thres: 0.7 
     first_stage_thres: 0.7
     feat_size: [4,10]
-    use_motion: False
-    motion_lambda: 1 
+    use_motion: True 
+    motion_lambda: 0.98 
     motion_gated: False
 
 posetrack:
@@ -92,8 +92,8 @@ posetrack:
     dup_iou_thres: 0.2
     confirm_iou_thres: 0.6
     first_stage_thres: 0.7
-    use_motion: False
-    motion_lambda: 1 
+    use_motion: True 
+    motion_lambda: 0.9999 
     motion_gated: False
     only_position: True
 
@@ -115,7 +115,7 @@ vis:
     confirm_iou_thres: 0.6
     first_stage_thres: 0.9
     use_motion: False
-    motion_lambda: 1 
+    motion_lambda: 0.9999 
     motion_gated: False
 
 

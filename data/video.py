@@ -199,6 +199,56 @@ class LoadImagesAndObs:
     def __len__(self):
         return self.nF  # number of batches
 
+class LoadImagesAndObsTAO:
+    def __init__(self, root, video_meta, obs, opt):
+        self.dataroot = root
+        self.img_ind = [x['id'] for x in video_meta]
+        self.img_files = [x['file_name'] for x in video_meta]
+        self.img_files = [osp.join(root, 'frames', x) for x in self.img_files]
+        self.obs = [obs.get(x, []) for x in self.img_ind]
+        self.use_lab = getattr(opt, 'use_lab', False)
+        self.transforms = T.Compose([T.ToTensor(), T.Normalize(opt.im_mean, opt.im_std)])
+
+    def __getitem__(self, index):
+        img_ori = cv2.imread(self.img_files[index])
+        if img_ori is None:
+            raise ValueError('File corrupt {}'.format(img_path))
+
+        h, w, _ = img_ori.shape
+        img = img_ori
+        if self.use_lab:
+            img = cv2.cvtColor(img, cv2.COLOR_BGR2LAB)
+            img = np.array([img[:,:,0],]*3)
+            img = img.transpose(1,2,0)
+        img = img / 255.
+        img = np.ascontiguousarray(img[ :, :, ::-1]) # BGR to RGB
+        if self.transforms is not None:
+            img = self.transforms(img)
+
+        obs = self.obs[index]
+        if len(obs) == 0:
+            labels = np.array([[0,0,1,1,-1,-1]])
+        else:
+            boxes = np.array([x.get('bbox', [0,0,1,1]) for x in obs])
+            scores = np.array([x.get('score', 0) for x in obs])[:, None]
+            cat_ids = np.array([x.get('category_id',-1) for x in obs])[:, None]
+            labels = np.concatenate([boxes, scores, cat_ids], axis=1)
+            if len(labels) > 0:
+                # From tlwh to xywh: (x,y) is the box center
+                labels[:, 0] = labels[:, 0] + labels[:, 2] / 2
+                labels[:, 1] = labels[:, 1] + labels[:, 3] / 2
+                labels[:, 0] /= w
+                labels[:, 1] /= h
+                labels[:, 2] /= w
+                labels[:, 3] /= h
+
+        return img, labels, img_ori, (h,w)
+
+    def __len__(self):
+        return len(self.img_files)
+
+
+
 class LoadImagesAndMaskObsVIS:
     def __init__(self, path, info, obs, opt):
         self.dataroot = path
@@ -307,12 +357,6 @@ class LoadImagesAndPoseObs(LoadImagesAndObs):
         labels = list() 
         labels = [l['annopoints'][0]['point'] for l in info_label]
 
-        #for infol in info_label:
-        #    mask_from_pose = skltn2mask(infol['annopoints'][0]['point'], (h,w))
-        #    labels.append(mask_from_pose)
-        #if len(labels) == 0:
-        #    labels.append(np.zeros((h,w)))
-        #labels = np.stack(labels)
         return img, labels, img_ori, (h, w)
         
 

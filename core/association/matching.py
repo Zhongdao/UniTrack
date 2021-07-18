@@ -201,7 +201,7 @@ def reconsdot_distance(tracks, detections, tmp=100):
     :param metric:
     :return: cost_matrix np.ndarray
     """
-
+    print(len(tracks), len(detections))
     cost_matrix = np.zeros((len(tracks), len(detections)), dtype=np.float)
     if cost_matrix.size == 0:
         return cost_matrix, None
@@ -248,5 +248,26 @@ def reconsdot_distance(tracks, detections, tmp=100):
     cost_matrix = 1 - 0.5 * (dot_td + dot_dt.transpose(0,1))
     
     cost_matrix = cost_matrix.detach().cpu().numpy()
-    
-    return cost_matrix, None #recons_ftrk_ret.cpu()
+
+    return cost_matrix, None
+
+def category_gate(cost_matrix, tracks, detections):
+    """
+    :param tracks: list[STrack]
+    :param detections: list[BaseTrack]
+    :param metric:
+    :return: cost_matrix np.ndarray
+    """
+    if cost_matrix.size == 0:
+        return cost_matrix
+
+    nd = len(detections)
+    nt = len(tracks)
+
+    det_categories = np.array([d.category for d in detections])
+    trk_categories = np.array([t.category for t in tracks])
+
+    cost_matrix = cost_matrix + np.abs(det_categories[None,:] - trk_categories[:,None])
+    return cost_matrix
+
+

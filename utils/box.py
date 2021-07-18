@@ -33,6 +33,18 @@ def xywh2xyxy(x):
     y[:, 3] = (x[:, 1] + x[:, 3] / 2)
     return y
 
+def tlwh2xyxy(x):
+    # Convert bounding box format from [x, y, w, h] to [x1, y1, x2, y2]
+    y = x.clone() if x.dtype is torch.float32 else x.copy() 
+    y[:, 2] = (x[:, 0] + x[:, 2])
+    y[:, 3] = (x[:, 1] + x[:, 3])
+    return y
+
+def tlwh_to_xywh(tlwh):
+    ret = np.asarray(tlwh).copy()
+    ret[:2] += ret[2:] / 2
+    return ret
+
 #@jit(nopython=True)
 def tlwh_to_xyah(tlwh):
     """Convert bounding box to format `(center x, center y, aspect ratio,
@@ -71,7 +83,6 @@ def scale_box_input_size(img_size, coords, img0_shape):
     coords[:, [0, 2]] -= pad_x
     coords[:, [1, 3]] -= pad_y
     coords[:, 0:4] /= gain
-    #coords[:, :4] = torch.clamp(coords[:, :4], min=0)
     return coords
 
 def clip_boxes(boxes, im_shape):

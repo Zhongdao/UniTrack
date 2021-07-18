@@ -59,15 +59,19 @@ class BaseTrack(object):
 class STrack(BaseTrack):
     shared_kalman = KalmanFilter()
 
-    def __init__(self, tlwh, score, temp_feat, buffer_size=30, mask=None, pose=None, ac=False):
+    def __init__(self, tlwh, score, temp_feat, buffer_size=30, 
+            mask=None, pose=None, ac=False, category=-1, use_kalman=True):
 
         # wait activate
         self._tlwh = np.asarray(tlwh, dtype=np.float)
         self.kalman_filter = None
         self.mean, self.covariance = None, None
+        self.use_kalman = use_kalman
+        if not use_kalman: ac=True
         self.is_activated = ac 
 
         self.score = score
+        self.category = category 
         self.tracklet_len = 0
 
         self.smooth_feat = None
@@ -82,12 +86,9 @@ class STrack(BaseTrack):
         if self.smooth_feat is None:
             self.smooth_feat = feat
         elif self.smooth_feat.shape == feat.shape:
-            #if len(self.smooth_feat.shape)>2:
-            #    feat = self.recons_feat(self.smooth_feat, feat)
             self.smooth_feat = self.alpha *self.smooth_feat + (1-self.alpha) * feat
         else:
             pass
-        #self.features.append(feat)
 
 
     def predict(self):
@@ -125,10 +126,13 @@ class STrack(BaseTrack):
         self.start_frame = frame_id
 
     def re_activate(self, new_track, frame_id, new_id=False, update_feature=True):
-        self.mean, self.covariance = self.kalman_filter.update(
-            self.mean, self.covariance, tlwh_to_xyah(new_track.tlwh)
-        )
-
+        if self.use_kalman:
+            self.mean, self.covariance = self.kalman_filter.update(
+                self.mean, self.covariance, tlwh_to_xyah(new_track.tlwh)
+            )
+        else:
+            self.mean, self.covariance = None, None
+            self._tlwh = np.asarray(new_track.tlwh, dtype=np.float)
         if update_feature:
             self.update_features(new_track.curr_feat)
         self.tracklet_len = 0
@@ -152,12 +156,20 @@ class STrack(BaseTrack):
         self.tracklet_len += 1
 
         new_tlwh = new_track.tlwh
-        self.mean, self.covariance = self.kalman_filter.update(
-            self.mean, self.covariance, tlwh_to_xyah(new_tlwh))
+        if self.use_kalman:
+            self.mean, self.covariance = self.kalman_filter.update(
+                self.mean, self.covariance, tlwh_to_xyah(new_tlwh))
+        else:
+            self.mean, self.covariance = None, None
+            self._tlwh = np.asarray(new_tlwh, dtype=np.float)
         self.state = TrackState.Tracked
         self.is_activated = True
 
         self.score = new_track.score
+        '''
+        For TAO dataset 
+        '''
+        self.category = new_track.category
         if update_feature:
             self.update_features(new_track.curr_feat)
         if not new_track.mask is None:
@@ -166,7 +178,6 @@ class STrack(BaseTrack):
             self.pose = new_track.pose
 
     @property
-    #@jit(nopython=True)
     def tlwh(self):
         """Get current position in bounding box format `(top left x, top left y,
                 width, height)`.
@@ -179,7 +190,6 @@ class STrack(BaseTrack):
         return ret
 
     @property
-    #@jit(nopython=True)
     def tlbr(self):
         """Convert bounding box to format `(min x, min y, max x, max y)`, i.e.,
         `(top left, bottom right)`.

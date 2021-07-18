@@ -48,8 +48,12 @@ mot:
     nms_thres: 0.4
     conf_thres: 0.5
     iou_thres: 0.5
+    dup_iou_thres: 0.15
+    confirm_iou_thres: 0.7
     img_size: [1088, 608]
     prop_flag: False
+    use_kalman: True 
+    asso_with_motion: False 
     motion_lambda: 1
     motion_gated: False
 
@@ -67,10 +71,12 @@ mots:
     max_mask_area: 200
     dup_iou_thres: 0.15
     confirm_iou_thres: 0.7 
-    motion_lambda: 1 
     first_stage_thres: 0.7
-    motion_gated: False
     feat_size: [4,10]
+    use_kalman: True 
+    asso_with_motion: False 
+    motion_lambda: 1 
+    motion_gated: False
 
 posetrack:
     obid: 'lighttrack_MSRA152'
@@ -88,36 +94,10 @@ posetrack:
     max_mask_area: 400
     dup_iou_thres: 0.2
     confirm_iou_thres: 0.6
-    motion_lambda: 1 
     first_stage_thres: 0.7
+    use_kalman: True 
+    asso_with_motion: False 
+    motion_lambda: 1 
     motion_gated: False
     only_position: True
-
-vis:
-    obid: 'MaskTrackRCNN'
-    data_root: '/home/wangzd/datasets/GOT/YoutubeVIS/'
-    split: 'val'
-    track_buffer: 30
-    nms_thres: 0.4
-    conf_thres: 0.5
-    iou_thres: 0.5
-    frame_rate: 6
-    save_videos: False
-    save_images: True
-    prop_flag: False
-    feat_size: [12,12]
-    max_mask_area: 1000
-    dup_iou_thres: 0.2
-    confirm_iou_thres: 0.6
-    motion_lambda: 1 
-    first_stage_thres: 0.9
-    motion_gated: False
-
-
-
-    
-
-
-
-
 

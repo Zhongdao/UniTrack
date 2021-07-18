@@ -1,3 +1,6 @@
+test/test_tao.py
+config/tao*
+
 weights/
 results/
 out/
