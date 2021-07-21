@@ -51,9 +51,10 @@ mot:
     confirm_iou_thres: 0.7
     img_size: [1088, 608]
     prop_flag: False
-    use_motion: True
+    use_kalman: True 
+    asso_with_motion: True 
     motion_lambda: 0.98
-    motion_gated: True
+    motion_gated: True 
 
 mots:
     obid: 'COSTA'
@@ -71,7 +72,8 @@ mots:
     confirm_iou_thres: 0.7 
     first_stage_thres: 0.7
     feat_size: [4,10]
-    use_motion: True 
+    use_kalman: True 
+    asso_with_motion: True 
     motion_lambda: 0.98 
     motion_gated: False
 
@@ -92,37 +94,9 @@ posetrack:
     dup_iou_thres: 0.2
     confirm_iou_thres: 0.6
     first_stage_thres: 0.7
-    use_motion: True 
-    motion_lambda: 0.9999 
+    use_kalman: True 
+    asso_with_motion: True 
+    motion_lambda: 0.9999
     motion_gated: False
     only_position: True
-
-vis:
-    obid: 'MaskTrackRCNN'
-    data_root: '/home/wangzd/datasets/GOT/YoutubeVIS/'
-    split: 'val'
-    track_buffer: 30
-    nms_thres: 0.4
-    conf_thres: 0.5
-    iou_thres: 0.5
-    frame_rate: 6
-    save_videos: False
-    save_images: True
-    prop_flag: False
-    feat_size: [12,12]
-    max_mask_area: 1000
-    dup_iou_thres: 0.2
-    confirm_iou_thres: 0.6
-    first_stage_thres: 0.9
-    use_motion: False
-    motion_lambda: 0.9999 
-    motion_gated: False
-
-
-
-    
-
-
-
-
 

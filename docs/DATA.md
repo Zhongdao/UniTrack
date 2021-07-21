@@ -1,4 +1,4 @@
-taset preparation
+# Dataset preparation
 
 ### Introduction
 
@@ -40,7 +40,7 @@ Download DAVIS 2017 trainval via [this link](https://data.vision.ee.ethz.ch/cser
 ### MOT 16 dataset for MOT
 
 1. Download MOT-16 dataset from [this page](https://motchallenge.net/data/MOT16/).
-2. Get detections for MOT-16 sequences. Here we offer multiple options:
+2. Get detections for MOT-16 sequences. Here we offer three options:
 
    - Using ground-truth detections. This is feasible only in the *train* split (we do not have labels for the *test* split). Run `python tools/gen_mot16_gt.py` to prepare the detections.
    - Using three kind of official detections (DPM/FRCNN/SDP) provided by MOT Challenge. Detections are from MOT-17 dataset (the video sequences in MOT-17 are the same as MOT-16), so you may need download MOT-17 and unzip it under the same root of MOT-16 first. Then run `python tools/gen_mot16_label17.py` to prepare the detections. Can generate detections for both *train* and *test* splits. 
@@ -50,5 +50,14 @@ Download DAVIS 2017 trainval via [this link](https://data.vision.ee.ethz.ch/cser
 
 ### MOTS dataset for MOTS
 
-
+1. Download MOT-16 dataset from [this page](https://motchallenge.net/data/MOTS/).
+2. Get segmentation masks for MOTS sequences. Here we offer two options:
+   - Using ground-truth detections. This is feasible only in the *train* split (we do not have labels for the *test* split). Run `python tools/gen_mots_gt.py` to prepare the detections.
+   - [Recommended] Using custom models to generate segmentation masks. You need to first run the model on MOTS dataset and output a series of `MOTS-XX.txt` files to store the mask results. See [here](https://motchallenge.net/instructions/) for the output format. Note that we do not use the track "id" field so you can output any number as a place holder. You can download results of off-the-shelf trackers and use their masks, for example, simply download the raw data of results of the COSTA tracker in the bottom of [this page](https://motchallenge.net/method/MOTS=87&chl=17). Finally run `tools/gen_mot16_fairmot.py` to prepare the masks (The script will keep the track "id" field. But again, it should be noted that the track "id" field is ignored when run tracking with UniTrack). 
+   
+   
 ### PoseTrack 2018 dataset for Pose Tracking
+
+1. Register and download [PoseTrack 2018 dataset](https://posetrack.net/).
+2. Get single-frame pose estimation results. Run a single-frame pose estimator, and save results in a `$OBS_NAME.json` file.Results should be formatted as instructed [here](https://github.com/leonid-pishchulin/poseval). The "track_id" field is ignored so you can output any number as a place holder. 
+3. Put the `.json` file under `$POSETRACK_ROOT/obs/$SPLIT/` folder, where `SPLIT` could be "train" or "val".
