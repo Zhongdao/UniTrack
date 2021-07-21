@@ -1,5 +1,6 @@
 test/test_tao.py
 config/tao*
+tracker/mot/tao.py
 
 weights/
 results/

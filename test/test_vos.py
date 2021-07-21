@@ -1,7 +1,6 @@
 from __future__ import print_function
 
 import os
-import pdb
 import sys
 sys.path[0] = os.getcwd()
 import time
@@ -19,43 +18,47 @@ from data import vos, jhmdb
 from model import AppearanceModel, partial_load
 from model.functional import *
 import utils
-from utils.visualize import dump_predictions 
+from utils.visualize import dump_predictions
+
 
 def main(args, vis):
     model = AppearanceModel(args).to(args.device)
-    print('Total params: %.2fM' % 
-            (sum(p.numel() for p in model.parameters())/1000000.0))
+    print('Total params: %.2fM' %
+          (sum(p.numel() for p in model.parameters())/1000000.0))
     print(model)
-    args.mapScale = [args.down_factor, args.down_factor] 
- 
+    args.mapScale = [args.down_factor, args.down_factor]
+
     model.eval()
     model = model.to(args.device)
 
     dataset = vos.VOSDataset(args)
-    val_loader = torch.utils.data.DataLoader(dataset,
-        batch_size=1, shuffle=False, num_workers=args.workers, pin_memory=True)
-    
+    val_loader = torch.utils.data.DataLoader(
+        dataset, batch_size=1, shuffle=False,
+        num_workers=args.workers, pin_memory=True)
+
     if not os.path.exists(args.save_path):
         os.makedirs(args.save_path)
-    
+
     with torch.no_grad():
-        test_loss = test(val_loader, model, args)
-            
+        test(val_loader, model, args)
+
     cvt_path = args.save_path.replace(args.exp_name, 'convert_'+args.exp_name)
-    
+
     # convert to DAVIS format
-    cvt_cmd_str = ('python ./eval/convert_davis.py --in_folder {} --out_folder {} '
-               '--dataset {}').format(args.save_path, cvt_path, args.davisroot)
+    cvt_cmd_str = ('python ./eval/convert_davis.py --in_folder {} '
+                   '--out_folder {} --dataset {}').format(
+                       args.save_path, cvt_path, args.davisroot)
     eval_cmd_str = ('python {}/evaluation_method.py --task semi-supervised '
-            '--results_path {} --set val --davis_path {}'.format(
-                args.evaltool_root, cvt_path, args.davisroot))
+                    '--results_path {} --set val --davis_path {}'.format(
+                        args.evaltool_root, cvt_path, args.davisroot))
     os.system(cvt_cmd_str)
     os.system(eval_cmd_str)
+
 
 def test(loader, model, args):
     n_context = args.videoLen
     D = None    # Radius mask
-    
+
     for vid_idx, (imgs, imgs_orig, lbls, lbls_orig, lbl_map, meta) in enumerate(loader):
         t_vid = time.time()
         imgs = imgs.to(args.device)
@@ -72,7 +75,7 @@ def test(loader, model, args):
             bsize = 5   # minibatch size for computing features
             feats = []
             for b in range(0, imgs.shape[1], bsize):
-                feat = model(imgs[:, b:b+bsize].transpose(1,2).to(args.device))
+                feat = model(imgs[:, b:b+bsize].transpose(1, 2).to(args.device))
                 feats.append(feat.cpu())
             feats = torch.cat(feats, dim=2).squeeze(1)
 
@@ -81,13 +84,12 @@ def test(loader, model, args):
 
             print('computed features', time.time()-t00)
 
-
             ##################################################################
             # Compute affinities
             ##################################################################
             torch.cuda.empty_cache()
             t03 = time.time()
-            
+
             # Prepare source (keys) and target (query) frame features
             key_indices = context_index_bank(n_context, args.long_mem, N - n_context)
             key_indices = torch.cat(key_indices, dim=-1)           

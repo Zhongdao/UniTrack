@@ -1,0 +1,21 @@
+TAO
+tao_i18s3_th005_fuse_wm
+Traceback (most recent call last):
+  File "/home/wangzd/GOT/UniTrack/eval/trackeval/eval.py", line 87, in evaluate
+    metric_names)
+  File "/home/wangzd/GOT/UniTrack/eval/trackeval/_timing.py", line 16, in wrap
+    result = f(*args, **kw)
+  File "/home/wangzd/GOT/UniTrack/eval/trackeval/eval.py", line 191, in eval_sequence
+    data = dataset.get_preprocessed_seq_data(raw_data, cls)
+  File "/home/wangzd/GOT/UniTrack/eval/trackeval/_timing.py", line 16, in wrap
+    result = f(*args, **kw)
+  File "/home/wangzd/GOT/UniTrack/eval/trackeval/datasets/tao.py", line 394, in get_preprocessed_seq_data
+    self._check_unique_ids(data)
+  File "/home/wangzd/GOT/UniTrack/eval/trackeval/datasets/_base_dataset.py", line 299, in _check_unique_ids
+    raise TrackEvalException(exc_str)
+eval.trackeval.utils.TrackEvalException: Tracker predicts the same ID more than once in a single timestep (seq: val-AVA-7YpF6DntOYw_scene_3_32470-33281, frame: 25, ids: 0)
+
+
+
+
+
