@@ -1,6 +1,7 @@
 test/test_tao.py
 config/tao*
 tracker/mot/tao.py
+eval/error_log.txt
 
 weights/
 results/
