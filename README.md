@@ -5,7 +5,7 @@
 
 Paper: Do different tracking tasks require different appearance model?
 
-**[[ArXiv](https://arxiv.org/pdf/2107.02156.pdf)]**  **[[Project Page](https://arxiv.org)] (coming soon)**
+**[[ArXiv](https://arxiv.org/pdf/2107.02156.pdf)]**  **[[Project Page](https://arxiv.org)]**
 
 UniTrack is a simple and Unified framework for addressing multiple tracking tasks. 
 
@@ -30,9 +30,17 @@ An appearance model is the only learnable component in UniTrack. It should provi
 
 ### Propagation and Association
 *Propagation* and *Association* are the two core primitives used in UniTrack to address a wide variety of tracking tasks (currently 7, but more can be added), Both use the features extracted by the pre-trained appearance model. For propagation, we adopt exiting methods such as [cross correlation](https://www.robots.ox.ac.uk/~luca/siamese-fc.html), [DCF](https://openaccess.thecvf.com/content_cvpr_2017/html/Valmadre_End-To-End_Representation_Learning_CVPR_2017_paper.html), and [mask propation](https://github.com/ajabri/videowalk). For association we employ a simple algorithm as in [JDE](https://github.com/Zhongdao/Towards-Realtime-MOT) and develop a novel reconstruction-based similairty metric that allows to compare objects across shapes and sizes.
+    
+    
+## Getting started
+
+1. Installation: Please check out [docs/INSTALL.md](docs/INSTALL.md)
+2. Data preparation: Please check out [docs/DATA.md](docs/DATA.md)
+3. Appearance model preparation: Please check out [docs/MODELZOO.md](docs/MODELZOO.md)
+4. Run evaluation on all datasets: Please check out [docs/RUN.md](docs/RUN.md)
 
 ## Results
-Below we show results of UniTrack with a simple **ImageNet Pre-trained ResNet-18** as the appearance model. More results (other tasks/datasets, more visualization) can be found in [results.md](results.md).
+Below we show results of UniTrack with a simple **ImageNet Pre-trained ResNet-18** as the appearance model. More results (other tasks/datasets, more visualization) can be found in [RESULTS.md](RESULTS.md).
 
 ### Qualitative results
 
@@ -105,21 +113,13 @@ Below we show results of UniTrack with a simple **ImageNet Pre-trained ResNet-18
  \* indicates methods using the same detections
 
 
-## Getting started
-
-1. Installation: Please check out [docs/INSTALL.md](docs/INSTALL.md)
-2. Data preparation: Please check out [docs/DATA.md](docs/DATA.md)
-3. Appearance model preparation: Please check out [docs/MODELZOO.md](docs/MODELZOO.md)
-4. Run evaluation on all datasets: Please check out [docs/RUN.md](docs/RUN.md)
-
-## Demo
 
 
 ## Update log
 
 [2021.07.05]: Paper released on [arXiv](https://arxiv.org/pdf/2107.02156.pdf).
 
-[2021.06.24]: Start writing docs, please stay tuned!
+[2021.06.24]: Code released.
 
 ## Acknowledgement
 [VideoWalk](https://github.com/ajabri/videowalk) by Allan A. Jabri
