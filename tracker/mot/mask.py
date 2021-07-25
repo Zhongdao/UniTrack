@@ -5,21 +5,9 @@
 # Created Time: Fri Jan 29 15:16:53 2021
 ###################################################################
 
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-
-import os
-import pdb
-import cv2
-import time
-import itertools
-import os.path as osp
-
 import numpy as np
 import torch
 import torch.nn.functional as F
-from torchvision import ops
 
 from utils.box import * 
 from utils.mask import *

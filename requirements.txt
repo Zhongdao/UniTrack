@@ -12,3 +12,6 @@ click==7.1.2
 motmetrics==1.2.0
 scikit-image==0.16.2
 colorama
+loguru
+thop
+tabulate

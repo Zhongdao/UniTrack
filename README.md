@@ -13,17 +13,28 @@ Being a fundamental problem in computer vision, tracking has been fragmented int
 
 - Does **NOT** need training on a specific tracking task.
 
-- Shows [competitive performance](docs/results.md) on six out of seven tracking tasks considered.
+- Shows [competitive performance](docs/RESULTS.md) on six out of seven tracking tasks considered.
 
-- Can be easily adapted to even [more tasks](docs/custom_task.md).
+- Can be easily adapted to even [more tasks](##Demo).
 
-- Can be used as an evaluation platform to [test pre-trained self-supervised models](docs/study.md).
+- Can be used as an evaluation platform to [test pre-trained self-supervised models](docs/MODELZOO.md).
+    
+ 
+## Demo
+**Multi-Object Tracking demo for 80 COCO classes ([YOLOX](https://github.com/Megvii-BaseDetection/YOLOX) + UniTrack)**
+<img src="docs/unitrack_yolox.gif" width="480"/> 
 
+In this demo we run the YOLOX detector and perform MOT for the 80 COCO classes. Try the demo by:
+```python
+python demo/mot_demo.py --classes cls1 cls2 ... clsN
+```
+where cls1 to clsN represent the indices of classes you would like to detect and track. See [here](https://gist.github.com/AruniRC/7b3dadd004da04c80198557db5da4bda) for the index list. By default all 80 classes are detected and tracked.
+    
 ## Tasks & Framework
 ![tasksframework](docs/tasksframework.png)
 
 ### Tasks
-We classify existing tracking tasks along four axes: (1) Single or multiple targets; (2) Users specify targets or automatic detectors specify targets; (3) Observation formats (bounding box/mask/pose); (2) Class-agnostic or class-specific (i.e. human/vehicles). We mainly expriment on 5 tasks: **SOT, VOS, MOT, MOTS, and PoseTrack**. Task setups are summarized in the above figure.
+We classify existing tracking tasks along four axes: (1) Single or multiple targets; (2) Users specify targets or automatic detectors specify targets; (3) Observation formats (bounding box/mask/pose); (2) Class-agnostic or class-specific (i.e. human/vehicles). We mainly experiment on 5 tasks: **SOT, VOS, MOT, MOTS, and PoseTrack**. Task setups are summarized in the above figure.
 
 ### Appearance model
 An appearance model is the only learnable component in UniTrack. It should provide universal visual representation, and is usually pre-trained on large-scale dataset in supervised or unsupervised manners. Typical examples include ImageNet pre-trained ResNets (supervised), and recent self-supervised models such as MoCo and SimCLR (unsupervised).
@@ -40,9 +51,7 @@ An appearance model is the only learnable component in UniTrack. It should provi
 4. Run evaluation on all datasets: Please check out [docs/RUN.md](docs/RUN.md)
 
 ## Results
-Below we show results of UniTrack with a simple **ImageNet Pre-trained ResNet-18** as the appearance model. More results (other tasks/datasets, more visualization) can be found in [RESULTS.md](RESULTS.md).
-
-### Qualitative results
+Below we show results of UniTrack with a simple **ImageNet Pre-trained ResNet-18** as the appearance model. More results (quantitative results, results on other tasks/datasets, and more visualization) can be found in [RESULTS.md](RESULTS.md).
 
 **Single Object Tracking (SOT) on OTB-2015**
 
@@ -64,62 +73,14 @@ Below we show results of UniTrack with a simple **ImageNet Pre-trained ResNet-18
 
 <img src="docs/posetrack1.gif" width="320"/>  <img src="docs/posetrack2.gif" width="320"/>
 
-### Quantitative results
-
-**Single Object Tracking (SOT) on OTB-2015**
-
-| Method | SiamFC | SiamRPN | SiamRPN++ | UDT* | UDT+* | LUDT* | LUDT+* | UniTrack_XCorr* | UniTrack_DCF* |
-| :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| AUC | 58.2 | 63.7 | 69.6 | 59.4 | 63.2 | 60.2 | 63.9 | 55.5 | 61.8|
-
- \* indicates non-supervised methods
-
-**Video Object Segmentation (VOS) on DAVIS-2017 *val* split**
-
-| Method | SiamMask | FeelVOS | STM | Colorization* | TimeCycle* | UVC* | CRW* | VFS* | UniTrack* |
-| :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| J-mean | 54.3 | 63.7 | 79.2 | 34.6 | 40.1 | 56.7 | 64.8 | 66.5 | 58.4|
-
- \* indicates non-supervised methods 
-
-**Multiple Object Tracking (MOT) on MOT-16 [*test* set *private detector* track](https://motchallenge.net/method/MOT=3856&chl=5)**
-
-| Method | POI | DeepSORT-2 | JDE | CTrack | TubeTK | TraDes | CSTrack | FairMOT* | UniTrack* |
-| :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| IDF-1 | 65.1 | 62.2 | 55.8 | 57.2 | 62.2 | 64.7 | 71.8 | 72.8 | 71.8|
-| IDs | 805 | 781 | 1544 | 1897 | 1236 | 1144 | 1071 | 1074 | 683 |
-| MOTA | 66.1 | 61.4 | 64.4 | 67.6 | 66.9 | 70.1 | 70.7 | 74.9 | 74.7|
-
- \* indicates methods using the same detections
-
-**Multiple Object Tracking and Segmentation (MOTS) on MOTS challenge [*test* set](https://motchallenge.net/method/MOTS=109&chl=17)**
-
-| Method | TrackRCNN | SORTS | PointTrack | GMPHD | COSTA_st* | UniTrack* |
-| :---: | :---: | :---: | :---: | :---: | :---: | :---: | 
-| IDF-1 | 42.7 | 57.3 | 42.9 | 65.6 | 70.3 | 67.2 |
-| IDs | 567 | 577 | 868 | 566 | 421 | 622 | 
-| sMOTA | 40.6 | 55.0 | 62.3 | 69.0 | 70.2 | 68.9 | 
-
- \* indicates methods using the same detections
-
-**Pose Tracking on PoseTrack-2018 *val* split**
-
-| Method | MDPN | OpenSVAI | Miracle | KeyTrack | LightTrack* | UniTrack* |
-| :---: | :---: | :---: | :---: | :---: | :---: | :---: | 
-| IDF-1 | - | - | - | - | 52.2 | 73.2 |
-| IDs | - | - | - | - | 3024 | 6760 | 
-| sMOTA | 50.6 | 62.4 | 64.0 | 66.6 | 64.8 | 63.5 | 
-
- \* indicates methods using the same detections
-
-
-
 
 ## Update log
 
+[2021.07.31]: Add Mulit-class Multi-Object Tracking demo (UniTrack+YOLOX).
+    
 [2021.07.05]: Paper released on [arXiv](https://arxiv.org/pdf/2107.02156.pdf).
 
-[2021.06.24]: Code released.
+[2021.06.24]: Start writing docs, please stay tuned!
 
 ## Acknowledgement
 [VideoWalk](https://github.com/ajabri/videowalk) by Allan A. Jabri

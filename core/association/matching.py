@@ -230,9 +230,9 @@ def reconsdot_distance(tracks, detections, tmp=100):
     recons_fdet_norm = F.normalize(recons_fdet, dim=1)
 
     dot_td = torch.einsum('tad,ta->td', recons_ftrk_norm,
-                          F.normalize(ftrk.view(ntrk, nst*ndim), dim=1))
+                          F.normalize(ftrk.reshape(ntrk, nst*ndim), dim=1))
     dot_dt = torch.einsum('dat,da->dt', recons_fdet_norm,
-                          F.normalize(fdet.view(ndet, nsd*ndim), dim=1))
+                          F.normalize(fdet.reshape(ndet, nsd*ndim), dim=1))
 
     cost_matrix = 1 - 0.5 * (dot_td + dot_dt.transpose(0, 1))
     cost_matrix = cost_matrix.detach().cpu().numpy()

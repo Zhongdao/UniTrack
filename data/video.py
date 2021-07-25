@@ -1,4 +1,5 @@
 import os
+import pdb
 import glob
 import json
 import os.path as osp
@@ -114,7 +115,6 @@ class LoadVideo:  # for inference
         # Normalize RGB
         img = img[:, :, ::-1]
         img = np.ascontiguousarray(img, dtype=np.float32)
-        img /= 255.0
 
         return self.count, img, img0
    
