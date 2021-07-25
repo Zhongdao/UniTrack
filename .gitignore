@@ -1,3 +1,6 @@
+docs/*.mp4
+detector/
+demo/
 test/test_tao.py
 config/tao*
 tracker/mot/tao.py

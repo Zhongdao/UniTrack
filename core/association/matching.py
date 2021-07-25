@@ -191,8 +191,7 @@ def get_track_feat(tracks, feat_flag='curr'):
     ret = torch.zeros(n, fdim, np.max(numels)).to(feat_list[0].device)
     for i, f in enumerate(feat_list):
         ret[i, :, :numels[i]] = f
-    return ret
-    
+    return ret 
 
 def reconsdot_distance(tracks, detections, tmp=100):
     """
@@ -201,55 +200,45 @@ def reconsdot_distance(tracks, detections, tmp=100):
     :param metric:
     :return: cost_matrix np.ndarray
     """
-    print(len(tracks), len(detections))
     cost_matrix = np.zeros((len(tracks), len(detections)), dtype=np.float)
     if cost_matrix.size == 0:
         return cost_matrix, None
-    det_features_ = get_track_feat(detections) 
-    track_features_ = get_track_feat(tracks,feat_flag='curr') 
-    
+    det_features_ = get_track_feat(detections)
+    track_features_ = get_track_feat(tracks, feat_flag='curr')
+
     det_features = F.normalize(det_features_, dim=1)
     track_features = F.normalize(track_features_, dim=1)
 
     ndet, ndim, nsd = det_features.shape
-    ntrk, _, nst  = track_features.shape
+    ntrk, _, nst = track_features.shape
 
-    fdet = det_features.permute(0,2,1).reshape(-1, ndim).cuda()     # ndet*nw*nh, ndim
-    ftrk = track_features.permute(0,2,1).reshape(-1, ndim).cuda()   # ntrk*nw*nh, ndim
-    fdet_ = det_features_.permute(0,2,1).reshape(-1, ndim).cuda()     # ndet*nw*nh, ndim
-    ftrk_ = track_features_.permute(0,2,1).reshape(-1, ndim).cuda()   # ntrk*nw*nh, ndim
+    fdet = det_features.permute(0, 2, 1).reshape(-1, ndim).cuda()
+    ftrk = track_features.permute(0, 2, 1).reshape(-1, ndim).cuda()
 
-    aff = torch.mm(ftrk, fdet.transpose(0,1))                         # ntrk*nw*nh, ndet*nw*nh
+    aff = torch.mm(ftrk, fdet.transpose(0, 1))
     aff_td = F.softmax(tmp*aff, dim=1)
-    aff_dt = F.softmax(tmp*aff, dim=0).transpose(0,1)
+    aff_dt = F.softmax(tmp*aff, dim=0).transpose(0, 1)
 
-    recons_ftrk = torch.einsum('tds,dsm->tdm', aff_td.view(ntrk*nst, ndet, nsd), 
-                                fdet.view(ndet, nsd, ndim))         # ntrk*nw*nh, ndet, ndim
+    recons_ftrk = torch.einsum('tds,dsm->tdm', aff_td.view(ntrk*nst, ndet, nsd),
+                               fdet.view(ndet, nsd, ndim))
     recons_fdet = torch.einsum('dts,tsm->dtm', aff_dt.view(ndet*nsd, ntrk, nst),
-                                ftrk.view(ntrk, nst, ndim))         # ndet*nw*nh, ntrk, ndim
+                               ftrk.view(ntrk, nst, ndim))
 
-    recons_ftrk_ = torch.einsum('tds,dsm->tdm', aff_td.view(ntrk*nst, ndet, nsd), 
-                                fdet_.view(ndet, nsd, ndim))         # ntrk*nw*nh, ndet, ndim
-    recons_fdet_ = torch.einsum('dts,tsm->dtm', aff_dt.view(ndet*nsd, ntrk, nst),
-                                ftrk_.view(ntrk, nst, ndim))         # ndet*nw*nh, ntrk, ndim
-
-    recons_ftrk_ret = recons_ftrk_.view(ntrk, nst, ndet, ndim)
-
-    recons_ftrk = recons_ftrk.permute(0,2,1).view(ntrk, nst*ndim, ndet)
+    recons_ftrk = recons_ftrk.permute(0, 2, 1).view(ntrk, nst*ndim, ndet)
     recons_ftrk_norm = F.normalize(recons_ftrk, dim=1)
-    recons_fdet = recons_fdet.permute(0,2,1).view(ndet, nsd*ndim, ntrk)
+    recons_fdet = recons_fdet.permute(0, 2, 1).view(ndet, nsd*ndim, ntrk)
     recons_fdet_norm = F.normalize(recons_fdet, dim=1)
-    
-    dot_td = torch.einsum('tad,ta->td', 
-            recons_ftrk_norm, F.normalize(ftrk.view(ntrk, nst*ndim), dim=1))   #ntrk, ndet
-    dot_dt = torch.einsum('dat,da->dt', 
-            recons_fdet_norm, F.normalize(fdet.view(ndet, nsd*ndim), dim=1)) 
 
-    cost_matrix = 1 - 0.5 * (dot_td + dot_dt.transpose(0,1))
-    
+    dot_td = torch.einsum('tad,ta->td', recons_ftrk_norm,
+                          F.normalize(ftrk.view(ntrk, nst*ndim), dim=1))
+    dot_dt = torch.einsum('dat,da->dt', recons_fdet_norm,
+                          F.normalize(fdet.view(ndet, nsd*ndim), dim=1))
+
+    cost_matrix = 1 - 0.5 * (dot_td + dot_dt.transpose(0, 1))
     cost_matrix = cost_matrix.detach().cpu().numpy()
 
     return cost_matrix, None
+
 
 def category_gate(cost_matrix, tracks, detections):
     """
@@ -261,13 +250,11 @@ def category_gate(cost_matrix, tracks, detections):
     if cost_matrix.size == 0:
         return cost_matrix
 
-    nd = len(detections)
-    nt = len(tracks)
-
     det_categories = np.array([d.category for d in detections])
     trk_categories = np.array([t.category for t in tracks])
 
-    cost_matrix = cost_matrix + np.abs(det_categories[None,:] - trk_categories[:,None])
+    cost_matrix = cost_matrix + np.abs(
+            det_categories[None, :] - trk_categories[:, None])
     return cost_matrix
 
 

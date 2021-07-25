@@ -1,30 +1,24 @@
 import os
-import pdb
 import glob
 import json
-import time
-import math
-import random
 import os.path as osp
-from collections import OrderedDict
 
 import cv2
 import numpy as np
-import torch
 
 import pycocotools.mask as mask_utils
-from torch.utils.data import Dataset
 from utils.box import xyxy2xywh
-from utils.mask import skltn2mask
 
 from torchvision.transforms import transforms as T
+
 
 class LoadImages:  # for inference
     def __init__(self, path, img_size=(1088, 608)):
         if os.path.isdir(path):
             image_format = ['.jpg', '.jpeg', '.png', '.tif']
             self.files = sorted(glob.glob('%s/*.*' % path))
-            self.files = list(filter(lambda x: os.path.splitext(x)[1].lower() in image_format, self.files))
+            self.files = list(filter(lambda x: os.path.splitext(x)[1].lower()
+                                     in image_format, self.files))
         elif os.path.isfile(path):
             self.files = [path]
 
@@ -58,9 +52,9 @@ class LoadImages:  # for inference
         img /= 255.0
 
         return img_path, img, img0
-    
+
     def __getitem__(self, idx):
-        idx = idx % self.nF 
+        idx = idx % self.nF
         img_path = self.files[idx]
 
         # Read image
@@ -83,7 +77,7 @@ class LoadImages:  # for inference
 
 class LoadVideo:  # for inference
     def __init__(self, path, img_size=(1088, 608)):
-        self.cap = cv2.VideoCapture(path)        
+        self.cap = cv2.VideoCapture(path) 
         self.frame_rate = int(round(self.cap.get(cv2.CAP_PROP_FPS)))
         self.vw = int(self.cap.get(cv2.CAP_PROP_FRAME_WIDTH))
         self.vh = int(self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
@@ -99,7 +93,7 @@ class LoadVideo:  # for inference
     def get_size(self, vw, vh, dw, dh):
         wa, ha = float(dw) / vw, float(dh) / vh
         a = min(wa, ha)
-        return int(vw *a), int(vh*a)
+        return int(vw * a), int(vh*a)
 
     def __iter__(self):
         self.count = -1
@@ -118,12 +112,12 @@ class LoadVideo:  # for inference
         img, _, _, _ = letterbox(img0, height=self.height, width=self.width)
 
         # Normalize RGB
-        img = img[:, :, ::-1].transpose(2, 0, 1)
+        img = img[:, :, ::-1]
         img = np.ascontiguousarray(img, dtype=np.float32)
         img /= 255.0
 
         return self.count, img, img0
-    
+   
     def __len__(self):
         return self.vn  # number of files
 
@@ -179,7 +173,7 @@ class LoadImagesAndObs:
         nL = len(labels)
         if nL > 0:
             # convert xyxy to xywh
-            labels[:, 0:4] = xyxy2xywh(labels[:, 0:4].copy()) #/ height
+            labels[:, 0:4] = xyxy2xywh(labels[:, 0:4].copy())
             labels[:, 0] /= width
             labels[:, 1] /= height
             labels[:, 2] /= width
@@ -187,10 +181,10 @@ class LoadImagesAndObs:
        
         if self.use_lab:
             img = cv2.cvtColor(img, cv2.COLOR_BGR2LAB)
-            img = np.array([img[:,:,0],]*3)
-            img = img.transpose(1,2,0)
+            img = np.array([img[:, :, 0], ]*3)
+            img = img.transpose(1, 2, 0)
         img = img / 255.
-        img = np.ascontiguousarray(img[ :, :, ::-1]) # BGR to RGB
+        img = np.ascontiguousarray(img[:, :, ::-1])  # BGR to RGB
         if self.transforms is not None:
             img = self.transforms(img)
 

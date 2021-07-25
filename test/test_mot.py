@@ -1,6 +1,5 @@
 import os
 import sys
-import pdb
 import cv2
 import yaml
 import logging
@@ -8,8 +7,6 @@ import argparse
 import os.path as osp
 
 import numpy as np
-import torch
-from torchvision.transforms import transforms as T
 
 sys.path[0] = os.getcwd()
 from utils.log import logger
@@ -17,7 +14,7 @@ from utils.meter import Timer
 import data.video as videodataset
 from utils import visualize as vis
 from utils.io import write_mot_results, mkdir_if_missing
-from eval import trackeval 
+from eval import trackeval
 
 from tracker.mot.box import BoxAssociationTracker
 
