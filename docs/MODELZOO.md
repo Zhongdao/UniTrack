@@ -17,17 +17,17 @@ One beneficial usage of UniTrack is that it allows easy evaluation of pre-traine
 | SimCLR-V2| ResNet-50 |[Google Drive]()|
 | SeLa-V2| ResNet-50 |[Google Drive](https://dl.fbaipublicfiles.com/deepcluster/selav2_400ep_pretrain.pth.tar)|
 | InfoMin| ResNet-50 | [Google Drive](https://www.dropbox.com/sh/87d24jqsl6ra7t2/AAAzMTynP3Qc8mIE4XWkgILUa/InfoMin_800.pth)|
-| BarlowTwins| ResNet-50 | [Google Drive]()|
+| BarlowTwins| ResNet-50 | [Google Drive](https://drive.google.com/file/d/1iXfAiAZP3Lrc-Hk4QHUzO-mk4M4fElQw/view?usp=sharing)|
 | BYOL| ResNet-50 | [Google Drive](https://storage.googleapis.com/deepmind-byol/checkpoints/pretrain_res50x1.pkl)|
 | DeepCluster-V2| ResNet-50 |[Google Drive](https://dl.fbaipublicfiles.com/deepcluster/deepclusterv2_800ep_pretrain.pth.tar)|
 | SwAV| ResNet-50 |[Google Drive](https://dl.fbaipublicfiles.com/deepcluster/swav_800ep_pretrain.pth.tar)|
-| PixPro| ResNet-50 |[Google Drive]()|
-| DetCo| ResNet-50 | [Google Drive]()|
-| TimeCycle| ResNet-50 |[Google Drive]()|
+| PixPro| ResNet-50 |[Google Drive](https://drive.google.com/file/d/1u172sUx-kldPvrZzZxijciBHLMiSJp46/view?usp=sharing)|
+| DetCo| ResNet-50 | [Google Drive](https://drive.google.com/file/d/1ahyX8HEbLUZXS-9Jr2GIMWDEZdqWe1GV/view?usp=sharing)|
+| TimeCycle| ResNet-50 |[Google Drive](https://drive.google.com/file/d/1WUYLkfowJ853RG_9OhbrKpb3r-cc-cOA/view?usp=sharing)|
 | ImageNet classification | ResNet-18 |torchvision|
-| Colorization + memory| ResNet-18 | [Google Drive]()|
-| UVC| ResNet-18 |[Google Drive]()|
-| CRW| ResNet-18 |[Google Drive]()|
+| Colorization + memory| ResNet-18 | [Google Drive](https://drive.google.com/file/d/1gWPRgYH70t-9uwj0EId826ZxFdosbzQv/view?usp=sharing)|
+| UVC| ResNet-18 |[Google Drive](https://drive.google.com/file/d/1nl0ehS8mvE5PUBOPLQSCWtrmFmS0-dPX/view?usp=sharing)|
+| CRW| ResNet-18 |[Google Drive](https://drive.google.com/file/d/1C1ujnpFRijJqVD3PV7qzyYwGSWoS9fLb/view?usp=sharing)|
 
 After downloading an appearance model, please place it under `$UNITRACK_ROOT/weights`. A large part of the model checkpoints are adopted from [ssl-transfer](https://github.com/linusericsson/ssl-transfer), many thanks to [linusericsson](https://github.com/linusericsson)!
 
