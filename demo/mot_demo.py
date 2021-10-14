@@ -189,5 +189,5 @@ if __name__ == '__main__':
     if args.tsize is not None:
         exp.test_size = args.tsize[::-1]
         args.img_size = args.tsize
-    args.classes = [x+1 for x in args.classes]
+    args.classes = [x for x in args.classes]
     main(exp, args)
