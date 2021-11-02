@@ -27,8 +27,8 @@ class BoxAssociationTracker(AssociationTracker):
         return ret
 
     def prepare_obs(self, img, img0, obs):
-        obs = torch.from_numpy(obs[obs[:, 4] > self.opt.conf_thres]).float()
         if len(obs) > 0:
+            obs = torch.from_numpy(obs[obs[:, 4] > self.opt.conf_thres]).float()
             obs = xywh2xyxy(obs)
             obs = scale_box(self.opt.img_size, obs)
             embs = self.extract_emb(img, obs)

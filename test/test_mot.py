@@ -159,7 +159,6 @@ if __name__ == '__main__':
                      MOT16-08
                      MOT16-12
                      MOT16-14'''
-        seqs_str = '''MOT16-03'''
         data_root = '{}/images/test'.format(opt.mot_root)
     seqs = [seq.strip() for seq in seqs_str.split()]
 

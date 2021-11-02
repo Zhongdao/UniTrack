@@ -51,7 +51,8 @@ mot:
     confirm_iou_thres: 0.7
     img_size: [1088, 608]
     prop_flag: False
-    use_motion: False
+    use_kalman: True 
+    asso_with_motion: False 
     motion_lambda: 1
     motion_gated: False
 
@@ -71,7 +72,8 @@ mots:
     confirm_iou_thres: 0.7 
     first_stage_thres: 0.7
     feat_size: [4,10]
-    use_motion: False
+    use_kalman: True 
+    asso_with_motion: False
     motion_lambda: 1 
     motion_gated: False
 
@@ -92,7 +94,8 @@ posetrack:
     dup_iou_thres: 0.2
     confirm_iou_thres: 0.6
     first_stage_thres: 0.7
-    use_motion: False
+    use_kalman: True
+    asso_with_motion: False
     motion_lambda: 1 
     motion_gated: False
     only_position: True
@@ -114,7 +117,8 @@ vis:
     dup_iou_thres: 0.2
     confirm_iou_thres: 0.6
     first_stage_thres: 0.9
-    use_motion: False
+    use_kalman: True
+    asso_with_motion: False
     motion_lambda: 1 
     motion_gated: False
 

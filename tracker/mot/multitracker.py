@@ -70,7 +70,7 @@ class AssociationTracker(object):
             dists = matching.fuse_motion(self.kalman_filter, dists, tracks, detections,
                                          lambda_=self.opt.motion_lambda,
                                          gate=self.opt.motion_gated)
-        if hasattr(obs, 'shape') and obs.shape[1] == 6:
+        if hasattr(obs, 'shape') and len(obs.shape) > 1 and obs.shape[1] == 6:
             dists = matching.category_gate(dists, tracks, detections)
         matches, u_track, u_detection = matching.linear_assignment(dists, thresh=0.7)
 
