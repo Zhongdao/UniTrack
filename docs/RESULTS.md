@@ -23,6 +23,7 @@
 | IDF-1 | 65.1 | 62.2 | 55.8 | 57.2 | 62.2 | 64.7 | 71.8 | 72.8 | 71.8|
 | IDs | 805 | 781 | 1544 | 1897 | 1236 | 1144 | 1071 | 1074 | 683 |
 | MOTA | 66.1 | 61.4 | 64.4 | 67.6 | 66.9 | 70.1 | 70.7 | 74.9 | 74.7|
+
  \* indicates methods using the same detections
 
 **Multiple Object Tracking and Segmentation (MOTS) on MOTS challenge [*test* set](https://motchallenge.net/method/MOTS=109&chl=17)**
