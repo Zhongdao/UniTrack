@@ -129,6 +129,12 @@ def make_encoder(args):
         net_state = {k.replace('module.encoder_q.', ''):v for k,v in net_ckpt['state_dict'].items() \
                 if 'module.encoder_q' in k}
         partial_load(net_state, net)
+    elif model_type == 'ssib':
+        net = resnet.resnet50(pretrained=False)
+        net_ckpt = torch.load(args.resume)
+        net_state = {k.replace('module.encoder.', ''):v for k,v in net_ckpt.items() \
+                if 'module.encoder' in k}
+        partial_load(net_state, net)
     elif model_type == 'uvc':
         net = load_uvc_model(args.resume)
     elif model_type == 'timecycle':

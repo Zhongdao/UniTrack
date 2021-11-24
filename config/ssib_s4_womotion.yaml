@@ -1,0 +1,133 @@
+common:
+    exp_name: ssib_s4_womotion
+   
+    # Model related
+    model_type: ssib 
+    remove_layers: []
+    im_mean: [0.485, 0.456, 0.406]
+    im_std: [0.229, 0.224, 0.225]
+    nopadding: False
+    head_depth: -1
+    resume: 'weights/ssib_200ep.pth.tar'
+    
+    # Misc
+    down_factor: 8
+    infer2D: True 
+    workers: 4
+    gpu_id: 0
+    device: cuda
+
+sot:
+    dataset: 'OTB2015'
+    dataroot: '/home/wangzd/datasets/GOT/OTB100/'
+    epoch_test: False
+
+vos:
+    davisroot: '/home/wangzd/datasets/uvc/DAVIS/'
+    split: 'val'
+    temperature: 0.05
+    topk: 10
+    radius: 12
+    videoLen: 5 
+    cropSize: -1
+    head_depth: -1
+    no_l2: False
+    long_mem: [0]
+    infer2D: False
+    norm_mask: False
+
+mot:
+    obid: 'FairMOT'
+    mot_root: '/home/wangzd/datasets/MOT/MOT16'
+    feat_size: [4,10]
+    save_videos: True
+    save_images: False
+    test_mot16: False
+    track_buffer: 30
+    min_box_area: 200
+    nms_thres: 0.4
+    conf_thres: 0.5
+    iou_thres: 0.5
+    dup_iou_thres: 0.15
+    confirm_iou_thres: 0.7
+    img_size: [1088, 608]
+    prop_flag: False
+    use_kalman: True 
+    asso_with_motion: False 
+    motion_lambda: 1
+    motion_gated: False
+
+mots:
+    obid: 'COSTA'
+    mots_root: '/home/wangzd/datasets/GOT/MOTS'
+    save_videos: False
+    save_images: True
+    test: False 
+    track_buffer: 30
+    nms_thres: 0.4
+    conf_thres: 0.5
+    iou_thres: 0.5
+    prop_flag: False
+    max_mask_area: 200
+    dup_iou_thres: 0.15
+    confirm_iou_thres: 0.7 
+    first_stage_thres: 0.7
+    feat_size: [4,10]
+    use_kalman: True 
+    asso_with_motion: False
+    motion_lambda: 1 
+    motion_gated: False
+
+posetrack:
+    obid: 'lighttrack_MSRA152'
+    data_root: '/home/wangzd/datasets/GOT/Posetrack2018'
+    split: 'val'
+    track_buffer: 30
+    nms_thres: 0.4
+    conf_thres: 0.5
+    iou_thres: 0.5
+    frame_rate: 6
+    save_videos: False
+    save_images: True
+    prop_flag: False
+    feat_size: [4,10]
+    max_mask_area: 200
+    dup_iou_thres: 0.2
+    confirm_iou_thres: 0.6
+    first_stage_thres: 0.7
+    use_kalman: True
+    asso_with_motion: False
+    motion_lambda: 1 
+    motion_gated: False
+    only_position: True
+
+vis:
+    obid: 'MaskTrackRCNN'
+    data_root: '/home/wangzd/datasets/GOT/YoutubeVIS/'
+    split: 'val'
+    track_buffer: 30
+    nms_thres: 0.4
+    conf_thres: 0.5
+    iou_thres: 0.5
+    frame_rate: 6
+    save_videos: False
+    save_images: True
+    prop_flag: False
+    feat_size: [12,12]
+    max_mask_area: 1000 
+    dup_iou_thres: 0.2
+    confirm_iou_thres: 0.6
+    first_stage_thres: 0.9
+    use_kalman: True
+    asso_with_motion: False
+    motion_lambda: 1 
+    motion_gated: False
+
+
+
+    
+
+
+
+
+

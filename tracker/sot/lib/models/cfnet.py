@@ -43,9 +43,6 @@ class CFNet(nn.Module):
         xf = torch.rfft(x, signal_ndim=2)
         kxzf = torch.sum(complex_mulconj(xf, self.model_zf), dim=1, keepdim=True)
         response = torch.irfft(complex_mul(kxzf, self.model_alphaf), signal_ndim=2)
-        # r_max = torch.max(response)
-        # cv2.imshow('response', response[0, 0].data.cpu().numpy())
-        # cv2.waitKey(0)
         return response
     
     def update(self, z, lr=0):
