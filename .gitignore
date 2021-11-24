@@ -9,6 +9,7 @@ config/tc128*
 config/tlp*
 config/trackingnet*
 config/vfs*
+config/ssib*
 
 weights/
 results/
