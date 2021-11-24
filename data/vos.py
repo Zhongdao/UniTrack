@@ -11,22 +11,26 @@ import time
 from matplotlib import cm
 from utils import im_to_numpy, im_to_torch
 
+
 def resize(img, owidth, oheight):
     img = im_to_numpy(img)
-    img = cv2.resize( img, (owidth, oheight) )
+    img = cv2.resize(img, (owidth, oheight))
     img = im_to_torch(img)
     return img
 
-def load_image(img_path):
+
+def load_image(img):
     # H x W x C => C x H x W
-    img = cv2.imread(img_path)
+    if isinstance(img, str):
+        img = cv2.imread(img)
     if len(img.shape) == 2:
         img = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
     img = img.astype(np.float32)
     img = img / 255.0
-    img = img[:,:,::-1]
+    img = img[:, :, ::-1]
     img = img.copy()
     return im_to_torch(img)
+
 
 def color_normalize(x, mean, std):
     if x.size(0) == 1:

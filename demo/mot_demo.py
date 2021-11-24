@@ -37,8 +37,6 @@ def make_parser():
                         help='demo type, eg. video or webcam')
     parser.add_argument('--path', default='./docs/test_video.mp3',
                         help='path to images or video')
-    parser.add_argument('--camid', type=int, default=0,
-                        help='webcam demo camera id')
     parser.add_argument('--save_result', action='store_true',
                         help='whether to save result')
     parser.add_argument("--nms", default=None, type=float,
