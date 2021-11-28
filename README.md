@@ -2,10 +2,9 @@
 
 --------------------------------------------------------------------------------
 
+**[NeurIPS 2021] Do different tracking tasks require different appearance model?**
 
-Paper: Do different tracking tasks require different appearance model?
-
-**[[ArXiv](https://arxiv.org/pdf/2107.02156.pdf)]**  **[[Project Page](https://arxiv.org)]**
+**[[ArXiv](https://arxiv.org/pdf/2107.02156.pdf)]**  **[[Project Page](https://zhongdao.github.io/UniTrack)]**
 
 UniTrack is a simple and Unified framework for addressing multiple tracking tasks. 
 
