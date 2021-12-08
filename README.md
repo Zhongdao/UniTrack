@@ -4,11 +4,11 @@
 
 **[NeurIPS 2021] Do different tracking tasks require different appearance model?**
 
-**[[ArXiv](https://arxiv.org/pdf/2107.02156.pdf)]**  **[[Project Page](https://zhongdao.github.io/UniTrack)]**
+**[[ArXiv](https://arxiv.org/abs/2107.02156)]**  **[[Project Page](https://zhongdao.github.io/UniTrack)]**
 
 UniTrack is a simple and Unified framework for addressing multiple tracking tasks. 
 
-Being a fundamental problem in computer vision, tracking has been fragmented into a multitude of different experimental setups. As a consequence, the literature has fragmented too, and now the novel approaches proposed by the community are usually specialized to fit only one specific setup. To understand to what extend this specialization is actually necessary, we present UniTrack, a solution to address multiple different tracking tasks within the same framework. All tasks share the same [appearance model](#appearance-model). UniTrack
+Being a fundamental problem in computer vision, tracking has been fragmented into a multitude of different experimental setups. As a consequence, the literature has fragmented too, and now the novel approaches proposed by the community are usually specialized to fit only one specific setup. To understand to what extent this specialization is actually necessary, we present UniTrack, a solution to address multiple different tracking tasks within the same framework. All tasks share the same [appearance model](#appearance-model). UniTrack
 
 - Does **NOT** need training on a specific tracking task.
 
@@ -29,6 +29,12 @@ python demo/mot_demo.py --classes cls1 cls2 ... clsN
 ```
 where cls1 to clsN represent the indices of classes you would like to detect and track. See [here](https://gist.github.com/AruniRC/7b3dadd004da04c80198557db5da4bda) for the index list. By default all 80 classes are detected and tracked.
     
+**Single-Object Tracking demo for custom videos**
+```python
+python demo/sot_demo.py --config ./config/imagenet_resnet18_s3.yaml --input /path/to/your/video
+```
+In this demo, you are asked to annotate the target to be tracked, by drawing a rectangle in the first frame of the video. Then the algorithm tracks the target in following timesteps without object detection.
+  
 ## Tasks & Framework
 ![tasksframework](docs/tasksframework.png)
 
@@ -50,7 +56,7 @@ An appearance model is the only learnable component in UniTrack. It should provi
 4. Run evaluation on all datasets: Please check out [docs/RUN.md](docs/RUN.md)
 
 ## Results
-Below we show results of UniTrack with a simple **ImageNet Pre-trained ResNet-18** as the appearance model. More results (quantitative results, results on other tasks/datasets, and more visualization) can be found in [RESULTS.md](RESULTS.md).
+Below we show results of UniTrack with a simple **ImageNet Pre-trained ResNet-18** as the appearance model. More results can be found in [RESULTS.md](docs/RESULTS.md).
 
 **Single Object Tracking (SOT) on OTB-2015**
 
