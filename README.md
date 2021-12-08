@@ -78,16 +78,19 @@ Below we show results of UniTrack with a simple **ImageNet Pre-trained ResNet-18
 
 <img src="docs/posetrack1.gif" width="320"/>  <img src="docs/posetrack2.gif" width="320"/>
 
-
-## Update log
-
-[2021.07.31]: Add Mulit-class Multi-Object Tracking demo (UniTrack+YOLOX).
-    
-[2021.07.05]: Paper released on [arXiv](https://arxiv.org/pdf/2107.02156.pdf).
-
-[2021.06.24]: Start writing docs, please stay tuned!
-
 ## Acknowledgement
+A part of code is borrowed from 
+    
 [VideoWalk](https://github.com/ajabri/videowalk) by Allan A. Jabri
 
 [SOT code](https://github.com/JudasDie/SOTS) by Zhipeng Zhang
+    
+## Citation
+```bibtex
+@article{wang2021different,
+  author    = {Wang, Zhongdao and Zhao, Hengshuang and Li, Ya-Li and Wang, Shengjin and Torr, Philip and Bertinetto, Luca},
+  title     = {Do different tracking tasks require different appearance models?},
+  journal   = {Thirty-Fifth Conference on Neural Infromation Processing Systems},
+  year      = {2021},
+}
+```
