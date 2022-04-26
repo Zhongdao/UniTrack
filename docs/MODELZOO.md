@@ -12,9 +12,9 @@ One beneficial usage of UniTrack is that it allows easy evaluation of pre-traine
 | PCL-V1| ResNet-50 |[Google Drive](https://storage.googleapis.com/sfr-pcl-data-research/PCL_checkpoint/PCL_v1_epoch200.pth.tar)|
 | PIRL| ResNet-50 | [Google Drive](https://www.dropbox.com/sh/87d24jqsl6ra7t2/AADN4jKnvTI0U5oT6hTmQZz8a/PIRL.pth)|
 | PCL-V2| ResNet-50 | [Google Drive](https://storage.googleapis.com/sfr-pcl-data-research/PCL_checkpoint/PCL_v2_epoch200.pth.tar)|
-| SimCLR-V1| ResNet-50 |[Google Drive]()|
+| SimCLR-V1| ResNet-50 |[Google Drive](https://drive.google.com/file/d/1RdB2KaaXOtU2_t-Uk_HQbxMZgSGUcy6c/view?usp=sharing)|
 | MoCo-V2| ResNet-50 |[Google Drive](https://dl.fbaipublicfiles.com/moco/moco_checkpoints/moco_v2_800ep/moco_v2_800ep_pretrain.pth.tar)|
-| SimCLR-V2| ResNet-50 |[Google Drive]()|
+| SimCLR-V2| ResNet-50 |[Google Drive](https://drive.google.com/file/d/1NSCrZ7MaejJaOS7yA3URtbubxLR-fz5X/view?usp=sharing)|
 | SeLa-V2| ResNet-50 |[Google Drive](https://dl.fbaipublicfiles.com/deepcluster/selav2_400ep_pretrain.pth.tar)|
 | InfoMin| ResNet-50 | [Google Drive](https://www.dropbox.com/sh/87d24jqsl6ra7t2/AAAzMTynP3Qc8mIE4XWkgILUa/InfoMin_800.pth)|
 | BarlowTwins| ResNet-50 | [Google Drive](https://drive.google.com/file/d/1iXfAiAZP3Lrc-Hk4QHUzO-mk4M4fElQw/view?usp=sharing)|
